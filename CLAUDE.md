@@ -34,7 +34,7 @@
 | ①マニュアルDB | `1VxEepC6PHtTO_Ic1JckaKMP9lItFCqhLLc5cpE2Gkkk` | メインシート名: マニュアルDB |
 | ToDo管理表 | `1wlEMVdorrpAKG895UWYKi3JcHWi1GAxj0MERW96Nc6k` | シート: 現場監視_気づきリスト / Todo |
 | 共有用フォルダ | `14c9fq29nca5tuMIxpO-szOHTxpBlFpfK` | スタッフ閲覧用。②③のPDFを置く |
-| ②完全版PDF | `<<PDF2_ID>>` | 初回 /マニュアル更新 実行時に自動記録 |
+| ②完全版PDF | `1m5bnWYeIpY_zigdAxQzfgdwotoXk4rvi` | 2026-07-27 初版作成。以後 files.update で中身のみ差し替え |
 | ③新人向けPDF | `<<PDF3_ID>>` | 同上 |
 | 履歴フォルダ「マニュアル履歴」 | `1Uoiu_cEJ82ADlJ4Se7Np_y6a64zB88jD` | 旧版PDFの退避先。経営陣のみ閲覧 |
 
