@@ -1,0 +1,1488 @@
+<meta charset="UTF-8">
+<title>Sasho マニュアル 完全版</title>
+<style>
+@page { size:A4 portrait; margin:16mm 15mm; }
+:root{
+  --ink:#1a1a1a; --ink-2:#4a4a4a; --ink-3:#767676;
+  --accent:#2b4257; --accent-l:#eaeef2; --accent-b:#c3ced8;
+  --ng:#9c3428; --ng-bg:#fbf1ef; --ok:#2f6b4f; --ok-bg:#eff5f1;
+  --warn:#8a6521; --warn-bg:#fbf6ea; --line:#dfe3e7; --paper:#fafafa;
+  --mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+  --gothic:"Hiragino Sans","Yu Gothic","Meiryo",sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+body{font-family:var(--gothic);color:var(--ink);font-size:10pt;line-height:1.8;margin:0}
+
+/* 表紙 */
+.cover{height:252mm;display:flex;flex-direction:column;justify-content:center;
+  text-align:center;page-break-after:always}
+.cover .mk{font-family:var(--mincho);font-size:9pt;letter-spacing:.55em;color:var(--accent);margin-bottom:11mm}
+.cover h1{font-family:var(--mincho);font-size:30pt;font-weight:600;letter-spacing:.18em;margin:0 0 5mm}
+.cover .sb{font-family:var(--mincho);font-size:12.5pt;color:var(--ink-2);letter-spacing:.5em;margin-bottom:15mm}
+.cover .rl{width:32mm;height:1.5pt;background:var(--accent);margin:0 auto 15mm}
+.cover .dt{font-size:10pt;color:var(--ink-3);letter-spacing:.12em}
+.cover .nt{margin:16mm auto 0;max-width:126mm;padding:5mm 6mm;border:.5pt solid var(--accent-b);
+  background:var(--paper);font-size:8.8pt;line-height:1.9;color:var(--ink-2);text-align:left}
+
+/* 目次 */
+.toc{page-break-after:always}
+.toc h2{font-family:var(--mincho);font-size:15pt;letter-spacing:.24em;margin:0 0 8mm;
+  padding-bottom:3mm;border-bottom:1.5pt solid var(--accent)}
+.toc ol{list-style:none;padding:0;margin:0;counter-reset:t}
+.toc li{counter-increment:t;border-bottom:.5pt dotted var(--accent-b);display:flex;
+  align-items:baseline;gap:3mm;padding:3.4mm 1mm}
+.toc li::before{content:"第" counter(t) "章";flex:0 0 15mm;font-family:var(--mincho);
+  font-size:8.5pt;color:var(--accent)}
+.toc .nm{flex:1;font-size:11pt}
+.toc .ct{font-size:8.5pt;color:var(--ink-3)}
+
+/* 章 */
+.ch{page-break-before:always}
+.ch-open{border-top:3pt solid var(--accent);padding-top:6mm;margin-bottom:9mm}
+.ch-eb{font-family:var(--mincho);font-size:8.5pt;letter-spacing:.34em;color:var(--accent)}
+.ch-nm{font-family:var(--mincho);font-size:23pt;font-weight:600;letter-spacing:.1em;margin:2mm 0 4mm}
+.ch-ld{font-size:9.4pt;line-height:1.95;color:var(--ink-2);max-width:152mm}
+.ch-mp{display:flex;flex-wrap:wrap;gap:1.5mm;margin-top:5mm;padding-top:4mm;border-top:.5pt solid var(--line)}
+.ch-mp span{font-size:8pt;color:var(--accent);background:var(--accent-l);
+  border:.5pt solid var(--accent-b);border-radius:2px;padding:.8mm 2.2mm}
+
+/* 節・項目 */
+.sec{margin-bottom:8mm}
+.sec-h{display:flex;align-items:baseline;gap:3mm;margin:0 0 4mm;padding-bottom:2mm;
+  border-bottom:1pt solid var(--accent)}
+.sec-n{font-family:var(--mincho);font-size:8.5pt;letter-spacing:.1em;color:#fff;
+  background:var(--accent);padding:.9mm 2.4mm;border-radius:2px;flex:0 0 auto}
+.sec-t{font-family:var(--mincho);font-size:13pt;font-weight:600;letter-spacing:.06em}
+.it{page-break-inside:avoid;margin-bottom:5mm}
+.it-h{display:flex;align-items:baseline;gap:2mm;font-size:10.6pt;font-weight:600;
+  margin:0 0 1.6mm;line-height:1.5}
+.it-h::before{content:"";flex:0 0 auto;width:2.6mm;height:2.6mm;background:var(--accent);
+  transform:rotate(45deg);margin-top:1mm}
+.id{font-size:7.4pt;font-weight:400;color:var(--ink-3);letter-spacing:.04em;white-space:nowrap}
+.it p{margin:0 0 1.6mm} .it p:last-child{margin-bottom:0}
+.it-b{padding-left:4.6mm}
+.loose{page-break-inside:auto}
+
+/* 部品 */
+.note{border-left:2pt solid var(--accent-b);background:var(--paper);padding:2.4mm 3.4mm;
+  margin:2.4mm 0 0;font-size:8.8pt;color:var(--ink-2);line-height:1.75}
+.note b{color:var(--accent);font-weight:600}
+.warn{border:.5pt solid #ddc9a4;border-left:2.6pt solid var(--warn);background:var(--warn-bg);
+  padding:2.6mm 3.4mm;margin:2.4mm 0 0;font-size:9pt;line-height:1.75}
+.warn b{color:var(--warn)}
+.danger{border:.5pt solid #e3c7c2;border-left:3pt solid var(--ng);background:var(--ng-bg);
+  padding:3mm 3.6mm;margin:2.4mm 0 0;font-size:9.2pt;line-height:1.75}
+.danger b{color:var(--ng)}
+.cmp{display:flex;gap:3mm;margin:2.6mm 0 0}
+.cmp>div{flex:1;border-radius:2px;padding:2.4mm 3mm;font-size:8.9pt;line-height:1.7}
+.bad{border:.5pt solid #e3c7c2;border-left:2.6pt solid var(--ng);background:var(--ng-bg)}
+.good{border:.5pt solid #c6dbcd;border-left:2.6pt solid var(--ok);background:var(--ok-bg)}
+.cmp .lb{display:block;font-size:7.6pt;font-weight:600;letter-spacing:.1em;margin-bottom:1mm}
+.bad .lb{color:var(--ng)} .good .lb{color:var(--ok)}
+table{width:100%;border-collapse:collapse;margin:2.6mm 0 0;font-size:9pt}
+th,td{border:.5pt solid var(--line);padding:1.8mm 2.4mm;text-align:left;vertical-align:top}
+th{background:var(--accent-l);color:var(--accent);font-weight:600;font-size:8.4pt;
+  letter-spacing:.06em;white-space:nowrap}
+td.k{background:var(--paper);font-weight:600;white-space:nowrap}
+td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.fmt{border:.5pt dashed var(--accent-b);background:#fcfdfd;padding:3mm 4mm;margin:2.6mm 0 0;
+  font-size:9.2pt;line-height:2.05}
+.fmt .q{font-family:var(--mincho);color:var(--accent);font-weight:600}
+.fmt .blank{display:inline-block;min-width:9mm;border-bottom:.8pt solid var(--ink-3);margin:0 .6mm}
+.talk{margin:2.6mm 0 0}
+.talk .ln{display:flex;gap:2.6mm;margin-bottom:1.6mm;font-size:9pt;line-height:1.7}
+.talk .who{flex:0 0 25mm;font-size:8.2pt;font-weight:600;color:var(--accent);text-align:right;padding-top:.3mm}
+.talk .say{flex:1;background:var(--paper);border-radius:2px;padding:1.6mm 2.6mm;
+  border-left:1.6pt solid var(--accent-b)}
+.steps{counter-reset:s;list-style:none;padding:0;margin:2.6mm 0 0}
+.steps li{counter-increment:s;position:relative;padding-left:8mm;margin-bottom:1.8mm;font-size:9.2pt;line-height:1.7}
+.steps li::before{content:counter(s);position:absolute;left:0;top:.2mm;width:5mm;height:5mm;
+  border-radius:50%;background:var(--accent);color:#fff;font-size:7.4pt;display:flex;
+  align-items:center;justify-content:center;font-weight:600}
+.rules{list-style:none;padding:0;margin:2.6mm 0 0;counter-reset:r}
+.rules>li{counter-increment:r;border:.5pt solid var(--line);border-top:2pt solid var(--accent);
+  border-radius:2px;padding:2.6mm 3.2mm;margin-bottom:2.6mm;page-break-inside:avoid}
+.rules>li>.rh{font-size:9.8pt;font-weight:600;margin-bottom:1.2mm}
+.rules>li>.rh::before{content:counter(r);display:inline-flex;width:4.6mm;height:4.6mm;
+  border-radius:50%;background:var(--accent);color:#fff;font-size:7.2pt;align-items:center;
+  justify-content:center;margin-right:2mm;vertical-align:1px}
+.rules>li>p{font-size:8.9pt;color:var(--ink-2);margin:0;line-height:1.75}
+.sw{display:inline-block;width:3.6mm;height:3.6mm;border-radius:50%;
+  border:.5pt solid rgba(0,0,0,.3);margin-right:1.8mm;vertical-align:-.5mm}
+
+/* フロー図（縦タイムライン） */
+.flow{margin:3mm 0 0}
+.ph{margin-bottom:4mm;page-break-inside:avoid}
+.ph-h{display:flex;align-items:center;gap:2.4mm;margin-bottom:2mm}
+.ph-h .b{flex:0 0 auto;font-family:var(--mincho);font-size:8.6pt;letter-spacing:.14em;color:#fff;
+  background:var(--accent);padding:1mm 3mm;border-radius:10mm}
+.ph-h .r{flex:1;height:.5pt;background:var(--accent-b)}
+.ph-h .n{flex:0 0 auto;font-size:7.6pt;color:var(--ink-3)}
+.ph ol{list-style:none;padding:0 0 0 3mm;margin:0;border-left:1.2pt solid var(--accent-b)}
+.ph ol li{position:relative;padding:0 0 2.2mm 7mm;font-size:9.2pt;line-height:1.72}
+.ph ol li:last-child{padding-bottom:0}
+.ph ol li .num{position:absolute;left:-3.6mm;top:.2mm;width:5.2mm;height:5.2mm;border-radius:50%;
+  background:#fff;border:1.2pt solid var(--accent);color:var(--accent);font-size:7pt;
+  font-weight:600;display:flex;align-items:center;justify-content:center}
+
+/* 1日のタイムライン */
+.day{margin:3mm 0 0;border-left:1.5pt solid var(--accent-b);padding-left:0}
+.day .row{display:flex;gap:3mm;align-items:flex-start;position:relative;padding:0 0 3mm 5mm}
+.day .row:last-child{padding-bottom:0}
+.day .row::before{content:"";position:absolute;left:-1.9mm;top:1.4mm;width:3.2mm;height:3.2mm;
+  border-radius:50%;background:var(--accent)}
+.day .tm{flex:0 0 26mm;font-family:var(--mincho);font-size:9.4pt;font-weight:600;color:var(--accent)}
+.day .ev{flex:1;font-size:9.4pt;line-height:1.65}
+.day .ev small{display:block;color:var(--ink-3);font-size:8.2pt;margin-top:.4mm}
+
+/* 順序（矢印） */
+.seq{display:flex;flex-wrap:wrap;align-items:stretch;gap:0;margin:2.6mm 0 0}
+.seq .n{border:.5pt solid var(--accent-b);background:var(--paper);border-radius:2px;
+  padding:2mm 3mm;font-size:9pt;text-align:center;min-width:26mm}
+.seq .n b{display:block;font-size:9.6pt;color:var(--accent)}
+.seq .n small{display:block;color:var(--ink-3);font-size:7.6pt;margin-top:.5mm;line-height:1.5}
+.seq .ar{display:flex;align-items:center;color:var(--accent-b);padding:0 1.6mm;font-size:11pt}
+
+/* くつ箱配置図 */
+.shoe{display:flex;gap:5mm;margin:2.6mm 0 0}
+.shoe .col{flex:1}
+.shoe .cap{font-size:8.4pt;font-weight:600;color:var(--accent);text-align:center;
+  background:var(--accent-l);border:.5pt solid var(--accent-b);border-bottom:none;padding:1.2mm}
+.shoe .cell{border:.5pt solid var(--accent-b);border-top:none;padding:2.2mm 2mm;font-size:9pt;
+  text-align:center;background:#fff}
+.shoe .cell small{color:var(--ink-3);font-size:7.6pt}
+</style>
+<div class="cover">
+  <div class="mk">SASHO</div>
+  <h1>Sasho マニュアル</h1>
+  <div class="sb">完全版</div>
+  <div class="rl"></div>
+  <div class="dt">2026年7月28日 版</div>
+  <div class="nt">
+    このPDFは2026年7月28日にマニュアルDBから自動生成されました。修正・追加の要望は経営陣へ。<br>
+    このPDFを直接編集しても、次回の更新で消えます。
+  </div>
+</div>
+<section class="toc"><h2>目次</h2><ol>
+<li><span class="nm">開店・閉店作業</span><span class="ct">5項目</span></li>
+<li><span class="nm">メニュー・料金</span><span class="ct">8項目</span></li>
+<li><span class="nm">ドリンク</span><span class="ct">18項目</span></li>
+<li><span class="nm">客席・レイアウト</span><span class="ct">7項目</span></li>
+<li><span class="nm">オペレーション・接客</span><span class="ct">40項目</span></li>
+<li><span class="nm">清掃・衛生</span><span class="ct">12項目</span></li>
+<li><span class="nm">備品・在庫</span><span class="ct">8項目</span></li>
+<li><span class="nm">発注・仕入れ</span><span class="ct">3項目</span></li>
+<li><span class="nm">設備・機器</span><span class="ct">10項目</span></li>
+<li><span class="nm">安全管理</span><span class="ct">7項目</span></li>
+<li><span class="nm">予約・レジ</span><span class="ct">13項目</span></li>
+<li><span class="nm">調理・仕込み</span><span class="ct">1項目</span></li>
+<li><span class="nm">身だしなみ</span><span class="ct">5項目</span></li>
+</ol></section>
+<!-- ══════════ 第1章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 1 章</div>
+  <div class="ch-nm">開店・閉店作業</div>
+  <p class="ch-ld">1日の始まりから締めまでの決まった作業をまとめています。まず下の1日の流れで時間の見当をつけ、各時間帯のチェックリストを順に確認してください。</p>
+  <div class="ch-mp"><span>1-1 開店準備の考え方</span><span>1-2 朝の準備</span><span>1-3 夕方の準備</span><span>1-4 締め作業</span><span>1-5 おしぼりの引き継ぎ</span></div>
+</div>
+
+<div class="it loose">
+  <div class="it-h">1日の流れ</div>
+  <div class="day">
+    <div class="row"><div class="tm">9:00</div><div class="ev">調理スタッフがおしぼり機のスイッチを入れる</div></div>
+    <div class="row"><div class="tm">10:00〜10:45</div><div class="ev">朝の準備（22項目）<small>10:30 デシャップはランチ・ディナーの予約確認と引き継ぎ</small></div></div>
+    <div class="row"><div class="tm">11:00</div><div class="ev">オープン</div></div>
+    <div class="row"><div class="tm">15:50〜16:00</div><div class="ev">表の看板・メニューの入れ替え</div></div>
+    <div class="row"><div class="tm">16:00までに</div><div class="ev">夕方の準備（16項目）</div></div>
+    <div class="row"><div class="tm">ディナー終了後</div><div class="ev">ホールの締め作業（15項目）<small>ホールスタッフがおしぼりを満杯に詰める</small></div></div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">1-1</span><span class="sec-t">開店準備の考え方</span></h2>
+  <div class="it"><div class="it-h">お客様が快適かどうかで判断する<span class="id">ID 164</span></div>
+    <div class="it-b"><p>開店準備は、清潔であることはもちろん、机の距離・窓・部屋の温度等、お客様が快適かどうかを考えて行う。</p></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">1-2</span><span class="sec-t">朝の準備（10:00〜10:45）</span></h2>
+  <div class="it loose"><div class="it-h">朝の開店準備チェックリスト（22項目）<span class="id">ID 1</span></div>
+    <ol class="steps">
+      <li>おしぼり機のスイッチ入れる</li><li>雨戸を開ける</li>
+      <li>気温をチェックして空調を入れる（季節によって除湿機の水捨てやサーキュレーター、ガスヒーター等の器具の向きや風量の確認）</li>
+      <li>電気をつける・門を開ける</li><li>表の掃き掃除</li>
+      <li>トイレ掃除（石鹸・アルコール残量チェック）</li>
+      <li>机拭き・机のセッティング（テーブルマット・箸置き・箸・コンロ）</li>
+      <li>BGM付ける</li><li>KEG冷蔵庫内のおしぼりチェック</li><li>掃除機かける</li>
+      <li>ハンディの再ログイン（アイパッド4台とハンディ）</li>
+      <li>アイパッドを各部屋の棚に1台ずつ置く</li>
+      <li>デシャップの人は10:30からランチディナーの予約を確認し、注意事項がないか確認＆引き継ぎ</li>
+      <li>おしぼりまく</li><li>レジ金確認（5万円）</li><li>ビールサーバーに氷を入れる</li>
+      <li>ガラスポットに氷と水を入れて各部屋の棚に置く（氷が溶けるのでなるべく開店直前に）</li>
+      <li>お茶のポットにティーバッグと水を入れる</li><li>発電機の充電用ケーブルを抜く</li>
+      <li>10:45：予約確認（ポイント・プレートなど）／前菜確認／外看板出す → 11:00オープン</li>
+      <li>電話の転送設定の解除</li><li>除湿機のホースが排水溝に流れることを確認する</li>
+    </ol>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">1-3</span><span class="sec-t">夕方の準備（16:00までに）</span></h2>
+  <div class="it loose"><div class="it-h">夕方のディナー準備チェックリスト（16項目）<span class="id">ID 2</span></div>
+    <ol class="steps">
+      <li>表の看板入れ替え（15:50〜16:00）</li><li>メニューの入れ替え（15:50〜16:00）</li>
+      <li>おしぼり用意・ドリンク在庫チェック</li><li>客室内・玄関の汚れチェック</li>
+      <li>ディナーの机の移動・セッティング・トイレ掃除（石鹸・アルコール残量チェック）</li>
+      <li>庭のライトつける（16:00出勤時）</li>
+      <li>窓拭き（お客様がいない時間があったらできるだけ）</li><li>夜の電気付ける</li>
+      <li>キッチンのテーブル周りを整える</li><li>しゃもじなどの水換え</li>
+      <li>ほうじ茶ポット 2台→1台へ</li><li>レジ金確認（5万円）</li>
+      <li>外看板の交換・夜の方への引き継ぎ</li><li>ビールに氷入れる</li>
+      <li>ほうじ茶ポットと水の用意・割り下などの用意</li>
+      <li>室温を確認して空調の調整（夏場はエアコンが効き過ぎている場合は弱める）</li>
+    </ol>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">1-4</span><span class="sec-t">ホールの締め作業</span></h2>
+  <div class="it loose"><div class="it-h">ホールの締め作業チェックリスト（15項目）<span class="id">ID 3</span></div>
+    <ol class="steps">
+      <li>雨戸締め（玄関横・トイレ手前・4卓の部屋）</li>
+      <li>電気消灯（トイレ忘れずに・お庭も！）</li><li>エアコン消す</li>
+      <li>机の拭き上げ・机をランチのセッティングに</li>
+      <li>看板・のれん回収・外の閉め作業</li><li>お米ラップ・ほうじ茶ボトルに入れる</li>
+      <li>ケトルの水捨てる・バケツ洗う</li><li>音楽消す・おしぼりスイッチOFF</li>
+      <li>クレジットカードリーダー充電＋蓄電器</li><li>ビール洗浄</li>
+      <li>ごみ捨て（冷蔵庫横の小さいカゴ忘れずに）</li><li>お手洗い＋使い捨てマット交換</li>
+      <li>シロップの計量カップなど洗う</li><li>蓄電池を充電する</li><li>電話の転送設定</li>
+    </ol>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">1-5</span><span class="sec-t">おしぼりの引き継ぎ</span></h2>
+  <div class="it"><div class="it-h">夜に詰め、翌朝スイッチを入れる<span class="id">ID 4</span></div>
+    <div class="it-b"><p>ディナー終了後にホールスタッフがおしぼりを満杯に詰める。翌朝、調理スタッフが9時に来ておしぼり機のスイッチを入れる。</p></div></div>
+</div>
+</section>
+
+<!-- ══════════ 第2章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 2 章</div>
+  <div class="ch-nm">メニュー・料金</div>
+  <p class="ch-ld">コース料金、追加・持ち込みの料金、キャンセル料をまとめています。金額はお客様への案内と会計に直結するため、レジ入力の方法とあわせて確認してください。</p>
+  <div class="ch-mp"><span>2-1 ディナーコース料金</span><span>2-2 ランチコース料金改定</span><span>2-3 追加・持ち込みメニュー</span><span>2-4 キャンセル料</span><span>2-5 ご提供のルール</span><span>2-6 調味料のこだわり</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">2-1</span><span class="sec-t">ディナーコース料金</span></h2>
+  <div class="it"><div class="it-h">コース一覧<span class="id">ID 5</span></div>
+    <table>
+      <tr><th>コース</th><th>葉山牛</th><th>葉山＆神戸</th><th>神戸牛</th></tr>
+      <tr><td class="k">おまかせしゃぶすき<br><small>（肉120g）</small></td><td class="num">¥16,500</td><td class="num">¥21,000<br><small>（両方+¥2,500）</small></td><td class="num">¥23,000<br><small>（両方+¥3,000）</small></td></tr>
+      <tr><td class="k">贅沢しゃぶすき</td><td class="num">¥19,000</td><td class="num">¥23,500</td><td class="num">¥25,500</td></tr>
+      <tr><td class="k">単品すき焼き</td><td class="num">¥8,800</td><td class="num">¥11,800</td><td class="num">¥13,200</td></tr>
+      <tr><td class="k">ウォークイン専用<br><small>（肉160g）</small></td><td class="num">¥16,500<br><small>（両方+¥2,500）</small></td><td class="num">¥21,000</td><td class="num">¥23,000<br><small>（両方+¥3,000）</small></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">2-2</span><span class="sec-t">ランチコース料金改定</span></h2>
+  <div class="it"><div class="it-h">改定後の料金と旧料金の扱い<span class="id">ID 6</span></div>
+    <table>
+      <tr><th>コース</th><th>旧料金</th><th>新料金</th><th>差額</th></tr>
+      <tr><td class="k">コースA</td><td class="num">¥23,000</td><td class="num">¥26,000</td><td class="num">+¥3,000</td></tr>
+      <tr><td class="k">コースB</td><td class="num">¥21,000</td><td class="num">¥24,000</td><td class="num">+¥3,000</td></tr>
+    </table>
+    <div class="warn">旧料金タブはUsenレジ最下部。テーブルチェックで<b>緑色表示</b>の予約は旧料金で会計する。<b>金額ではなく色で判断すること。</b></div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">2-3</span><span class="sec-t">追加・持ち込みメニュー</span></h2>
+  <div class="it"><div class="it-h">料金とレジ入力方法<span class="id">ID 7</span></div>
+    <table>
+      <tr><th>項目</th><th>料金</th><th>レジ入力</th></tr>
+      <tr><td class="k">誕生日ケーキ持ち込み</td><td class="num">¥2,000 / ホール</td><td>「その他」から入力</td></tr>
+      <tr><td class="k">ドリンク持ち込み</td><td class="num">¥4,000 / 本</td><td>「その他」から入力</td></tr>
+      <tr><td class="k">わらびもち（デザート追加）</td><td class="num">¥250</td><td>「アイスカクシュ」ボタン</td></tr>
+      <tr><td class="k">梅酒・もも酒・りんご酒・みかん酒</td><td class="num">¥800</td><td>—</td></tr>
+      <tr><td class="k">しめ</td><td class="num">¥550</td><td>—</td></tr>
+      <tr><td class="k">たまご追加</td><td class="num">¥200</td><td>—</td></tr>
+      <tr><td class="k">ごはん追加</td><td class="num">¥200</td><td>—</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">2-4</span><span class="sec-t">キャンセル料</span></h2>
+  <div class="it"><div class="it-h">金額と発生条件<span class="id">ID 8</span></div>
+    <table>
+      <tr><td class="k">ランチ</td><td class="num">¥3,000 / 人</td></tr>
+      <tr><td class="k">ディナー</td><td class="num">¥5,000 / 人</td></tr>
+    </table>
+    <p style="margin-top:2.4mm">前日21時までに連絡があればキャンセル料は発生しない。</p>
+    <div class="warn">キャンセル発生時は<b>必ずキッチンにも共有する</b>。</div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">2-5</span><span class="sec-t">ご提供のルール</span></h2>
+  <div class="it"><div class="it-h">白米と香の物<span class="id">ID 9</span></div>
+    <div class="it-b"><p>白米を提供する際は必ず香の物を一緒に出す。白米を提供しない場合は不要。</p></div></div>
+  <div class="it"><div class="it-h">お子様のご飯・デザート<span class="id">ID 122</span></div>
+    <div class="it-b"><p>メインのお料理を注文なさらなかった場合に子供のご飯を求められた場合は有料でご案内する。デザートはあげてもよい。ある場合はアイスクリームが喜ばれる。</p></div></div>
+  <div class="it"><div class="it-h">ラストオーダーと追加注文のご提案<span class="id">ID 118</span></div>
+    <table>
+      <tr><th></th><th>食事</th><th>ドリンク</th></tr>
+      <tr><td class="k">ディナー</td><td>21:15</td><td>21:30</td></tr>
+      <tr><td class="k">ランチ</td><td>15:00</td><td>特に定めない</td></tr>
+    </table>
+    <div class="note">ラストオーダーの時間にかかわらず、<b>飲み物が残り3割以下</b>になったタイミングや、<b>お肉を下げる</b>タイミングで、追加注文をお勧めすることを徹底する。</div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">2-6</span><span class="sec-t">調味料のこだわり（お客様への回答例）</span></h2>
+  <div class="it loose"><div class="it-h">割り下・ポン酢・胡麻だれ<span class="id">ID 103</span></div>
+    <table>
+      <tr><th>調味料</th><th>こだわり</th></tr>
+      <tr><td class="k">割下</td><td>赤酒（九州の甘みのある料理酒）を使用し、その分砂糖を控えている。塩分濃度は控えめだが、コクのある甘みでカバー。出汁は北海道産の真昆布を使用。</td></tr>
+      <tr><td class="k">ポン酢</td><td>旨みを強めるため鰹出汁を使用。野菜の水分で薄まらないよう塩分濃度はやや高め。</td></tr>
+      <tr><td class="k">胡麻だれ</td><td>ポン酢と差別化するため酸味を抑え、ごまを多く使い甘みと旨みを重視した配合。</td></tr>
+    </table>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 第3章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 3 章</div>
+  <div class="ch-nm">ドリンク</div>
+  <p class="ch-ld">分量とグラスの組み合わせ、氷やコースターの扱い、開栓後の管理をまとめています。分量はランチとディナーで異なるものがあるため、時間帯を確認してから作ってください。</p>
+  <div class="ch-mp"><span>3-1 分量とグラス</span><span>3-2 氷・グラス・コースター</span><span>3-3 提供のルール</span><span>3-4 開栓後の管理</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">3-1</span><span class="sec-t">分量とグラス</span></h2>
+  <div class="it loose"><div class="it-h">ランチ ドリンク分量<span class="id">ID 11</span></div>
+    <table>
+      <tr><th>銘柄</th><th>分量</th><th>グラス</th></tr>
+      <tr><td class="k">ワイン<br><small>（グラス・アンサンブル、変更なし）</small></td><td>100cc</td><td>ワイングラス</td></tr>
+      <tr><td class="k">あらごし各種</td><td>90cc＋炭酸</td><td>大グラス</td></tr>
+      <tr><td class="k">ジンジャーエール</td><td>60cc＋炭酸</td><td>大グラス</td></tr>
+      <tr><td class="k">梅ジュース</td><td>45cc＋炭酸</td><td>小グラス</td></tr>
+      <tr><td class="k">アランミリア</td><td>170cc</td><td>ワイングラス</td></tr>
+      <tr><td class="k">KEG各種</td><td>グラス1杯 80cc</td><td>KEGグラス</td></tr>
+      <tr><td class="k">飲み比べ2種</td><td>60cc×2</td><td>KEGグラス</td></tr>
+      <tr><td class="k">飲み比べ3種</td><td>50cc×3</td><td>ダラスグラス</td></tr>
+      <tr><td class="k">鎌倉ビール（大）</td><td>—</td><td>大グラス</td></tr>
+      <tr><td class="k">鎌倉ビール（小）</td><td>—</td><td>小グラス</td></tr>
+      <tr><td class="k">オールフリー・きよみ・湘南サイダー</td><td>—</td><td>瓶＋小グラスで提供</td></tr>
+    </table>
+  </div>
+
+  <div class="it loose"><div class="it-h">ディナー ドリンク分量<span class="id">ID 12</span></div>
+    <table>
+      <tr><th>銘柄</th><th>分量</th></tr>
+      <tr><td class="k">ウイスキー<br><small>（割・ロック・ストレート全て）</small></td><td>40cc<br><small>メニュー記載35mLと異なる点に注意</small></td></tr>
+      <tr><td class="k">レモンサワー</td><td>60cc</td></tr>
+      <tr><td class="k">梅酒</td><td>60cc</td></tr>
+      <tr><td class="k">緑茶ハイ（鳥飼）</td><td>40〜45cc</td></tr>
+      <tr><td class="k">焼酎各種</td><td>60〜45cc</td></tr>
+      <tr><td class="k">お茶ボトル各種</td><td>100cc</td></tr>
+      <tr><td class="k">ワイン（赤・白・泡）</td><td>100cc</td></tr>
+      <tr><td class="k">あらごし各種</td><td>90cc</td></tr>
+    </table>
+  </div>
+
+  <div class="it loose"><div class="it-h">日本酒KEG 価格・分量<span class="id">ID 13</span></div>
+    <table>
+      <tr><th></th><th>メニュー</th><th>分量</th><th>価格（税込）</th></tr>
+      <tr><td class="k" rowspan="4">ランチ</td><td>グラス1杯</td><td>80cc</td><td class="num">¥700</td></tr>
+      <tr><td>飲み比べ2種</td><td>60cc×2</td><td class="num">¥1,100</td></tr>
+      <tr><td>飲み比べ3種</td><td>50cc×3</td><td class="num">¥1,500</td></tr>
+      <tr><td>徳利</td><td>150cc</td><td class="num">—</td></tr>
+      <tr><td class="k" rowspan="2">ディナー</td><td>グラス1杯</td><td>80〜90cc</td><td class="num">¥1,000</td></tr>
+      <tr><td>ペアリング5種</td><td>45〜50cc×5</td><td class="num">¥4,800</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">3-2</span><span class="sec-t">氷・グラス・コースター</span></h2>
+  <div class="it"><div class="it-h">氷の使い分け<span class="id">ID 167 / 168</span></div>
+    <table>
+      <tr><td class="k">ディナーのドリンク</td><td>ロックアイスを使用する</td></tr>
+      <tr><td class="k">ハイボール、焼酎の水割り・<br>ソーダ割り、炭酸で割るドリンク</td><td>氷を満杯に入れる。<b>ただしグラスの縁より氷が上に来ないようにする。</b></td></tr>
+    </table>
+  </div>
+  <div class="it"><div class="it-h">コースターの使用ルール<span class="id">ID 169</span></div>
+    <div class="it-b"><p>コースターはビール系と氷の入ったドリンクにつける。ランチの無料の水にはコースターは不要、ディナーはコースターを使用する。</p></div></div>
+  <div class="it"><div class="it-h">度数の高いアルコールには水を提供<span class="id">ID 170</span></div>
+    <div class="it-b"><p>ワイン、日本酒、ウイスキーと焼酎のロック等、度数の高いアルコールには水を提供する。</p></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">3-3</span><span class="sec-t">提供のルール</span></h2>
+  <div class="it"><div class="it-h">グラス提供の銘柄と例外<span class="id">ID 16 / 17</span></div>
+    <table>
+      <tr><td class="k">ランチシャンパン</td><td>ボトルのみ。<b>グラス提供はしない</b></td></tr>
+      <tr><td class="k">玄米・華火・バラ</td><td>ワイングラスで提供する</td></tr>
+    </table>
+  </div>
+  <div class="it"><div class="it-h">瓶のお酒の提供方法<span class="id">ID 114</span></div>
+    <div class="it-b"><p>瓶の日本酒を提供する際は、グラスとともに瓶をお見せする。最初だけ机に置いておいて、次にお伺いしたタイミングで下げる。</p></div></div>
+  <div class="it"><div class="it-h">ウーロン茶の提供（ディナーのみ）<span class="id">ID 18</span></div>
+    <div class="it-b"><p>ウーロン茶（ディナーのみ）は冷蔵庫・炊飯器下に保管し、グラスに水を入れてお客様の前で注ぐ。</p></div></div>
+  <div class="it"><div class="it-h">無料提供ドリンクの統一<span class="id">ID 19</span></div>
+    <div class="it-b"><p>無料提供は「冷たい水」または「温かいお茶」に統一する。冷たいお茶はスタッフ用。</p></div></div>
+  <div class="it"><div class="it-h">ほうじ茶ピッチャーの処理<span class="id">ID 20</span></div>
+    <div class="it-b"><p>ピッチャーは、夜に余ったほうじ茶を1本だけ残して残りは処分する。</p></div></div>
+  <div class="it"><div class="it-h">アイスの器ルール<span class="id">ID 21</span></div>
+    <div class="it-b"><p>アイスはガラスの容器を使わず、新しい器を使う。</p></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">3-4</span><span class="sec-t">開栓後の管理</span></h2>
+  <div class="it"><div class="it-h">開栓ドリンクの日付管理<span class="id">ID 14</span></div>
+    <div class="it-b"><p>開栓後は必ず日付を書いてドリンクに付ける。<b>前日に開けた炭酸水は捨てる。</b></p></div></div>
+  <div class="it"><div class="it-h">開栓ワインの保存キャップ<span class="id">ID 129</span></div>
+    <div class="it-b"><p>開栓したワインには、必ず空気が抜けるキャップを付ける。</p></div></div>
+  <div class="it"><div class="it-h">在庫優先使用ルール<span class="id">ID 15</span></div>
+    <div class="it-b"><p>お酒類・Tea companyは、開いているものがあるか確認してから新しいものを開ける。</p></div></div>
+  <div class="it"><div class="it-h">お茶パックの交換<span class="id">ID 22</span></div>
+    <div class="it-b"><p>お茶は毎回新しいパック（1個）を使う。古いパックを取り出してから新しいものを入れる。</p></div></div>
+</div>
+</section>
+
+<!-- ══════════ 第4章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 4 章</div>
+  <div class="ch-nm">客席・レイアウト</div>
+  <p class="ch-ld">席番号の決まりと、セッティング・くつ箱の配置をまとめています。席番号には使わない番号やまとめて扱う卓があるため、声かけや伝票の前に確認してください。</p>
+  <div class="ch-mp"><span>4-1 席番号の扱い</span><span>4-2 セッティングと拭き上げ</span><span>4-3 窓の配置</span><span>4-4 くつ箱の配置</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">4-1</span><span class="sec-t">席番号の扱い</span></h2>
+  <div class="it"><div class="it-h">席番号の決まり<span class="id">ID 23 / 24 / 25</span></div>
+    <table>
+      <tr><th>対象</th><th>扱い</th></tr>
+      <tr><td class="k">2番・6番・10番</td><td><b>使用しない席</b></td></tr>
+      <tr><td class="k">12番</td><td>店の入口。入口（玄関）にベルがある</td></tr>
+      <tr><td class="k">9番＋10番</td><td>1卓として扱う。電票・声かけとも<b>5番・9番に統一</b>する</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">4-2</span><span class="sec-t">セッティングと拭き上げ</span></h2>
+  <div class="it"><div class="it-h">コンロの置き位置<span class="id">ID 26</span></div>
+    <div class="it-b"><p>コンロのセッティングは、テーブルの中央ではなく<b>手前に寄せて</b>置く。</p></div></div>
+  <div class="it"><div class="it-h">「リセット済み」表記のタイミング<span class="id">ID 27</span></div>
+    <div class="it-b"><p>「リセット済み」表記は、机・いすの拭き上げが完全に終わってから押す。</p></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">4-3</span><span class="sec-t">窓の配置</span></h2>
+  <div class="it"><div class="it-h">窓は二重にしない<span class="id">ID 175</span></div>
+    <div class="it-b"><p>窓は二重にしない。なるべく綺麗にお庭が見えるように配置する。</p>
+      <div class="note">（参考）湿気の多い時期は、窓を二重にすると曇りにくくなる。</div></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">4-4</span><span class="sec-t">くつ箱の配置</span></h2>
+  <div class="it"><div class="it-h">配置図<span class="id">ID 28</span></div>
+    <div class="shoe">
+      <div class="col">
+        <div class="cap">左 側</div>
+        <div class="cell"><small>上段</small><br>4番</div>
+        <div class="cell"><small>中段</small><br>1番・2/3番</div>
+        <div class="cell"><small>下段</small><br>下駄</div>
+      </div>
+      <div class="col">
+        <div class="cap">右 側（上から順に）</div>
+        <div class="cell">5/6番</div>
+        <div class="cell">7番</div>
+        <div class="cell">8番</div>
+        <div class="cell">9/10番</div>
+        <div class="cell">ブーツ・11番・11番</div>
+      </div>
+    </div>
+  </div>
+</div>
+</section>
+<!-- ══════════ 第5章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 5 章</div>
+  <div class="ch-nm">オペレーション・接客</div>
+  <p class="ch-ld">
+    お出迎えからお見送りまでの一連の流れと、その中で必要になる連携・提供・器具の扱いをまとめています。
+    まず「接客の一連の流れ」で全体像をつかみ、そのうえで各場面の個別ルールを確認してください。
+  </p>
+  <div class="ch-mp">
+    <span>5-1 接客の一連の流れ</span><span>5-2 お出迎えとご案内</span>
+    <span>5-3 インカム運用</span><span>5-4 キッチンとの連携</span>
+    <span>5-5 すき焼き・しゃぶしゃぶの提供</span><span>5-6 締め・デザートの提供</span>
+    <span>5-7 調理器具・什器の扱い</span><span>5-8 レジ・電話・設備の操作</span>
+    <span>5-9 引き継ぎと勤務のルール</span>
+  </div>
+</div>
+
+<!-- 5-1 -->
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">5-1</span><span class="sec-t">接客の一連の流れ</span></h2>
+  <div class="it">
+    <div class="it-h">お出迎えから再セットまで（25ステップ）<span class="id">ID 176</span></div>
+    <div class="flow">
+
+      <div class="ph">
+        <div class="ph-h"><span class="b">ご入店・ご案内</span><span class="r"></span><span class="n">STEP 1–5</span></div>
+        <ol>
+          <li><span class="num">1</span>お出迎え・お見送りは最優先で対応する</li>
+          <li><span class="num">2</span>ご予約のお客様かどうかを伺う</li>
+          <li><span class="num">3</span>予約の場合はお名前を伺い、席にご案内する</li>
+          <li><span class="num">4</span>荷物かごは布をかけて机の下か椅子の下に入れる。接客の際、自分の通り道には絶対に置かない（食器を落としたりこぼした時に荷物が汚れないため）</li>
+          <li><span class="num">5</span>おしぼりとメニューを渡す</li>
+        </ol>
+      </div>
+
+      <div class="ph">
+        <div class="ph-h"><span class="b">ご注文・ファーストドリンク</span><span class="r"></span><span class="n">STEP 6–10</span></div>
+        <ol>
+          <li><span class="num">6</span>ご予約の確認をする</li>
+          <li><span class="num">7</span>ファーストドリンクのおすすめをする</li>
+          <li><span class="num">8</span>進行状況は逐一ホールと厨房に報告する</li>
+          <li><span class="num">9</span>履き物を下駄箱にしまう（ディナーは卓番に応じた場所にしまう）</li>
+          <li><span class="num">10</span>ファーストドリンクを提供する</li>
+        </ol>
+      </div>
+
+      <div class="ph">
+        <div class="ph-h"><span class="b">お料理の提供</span><span class="r"></span><span class="n">STEP 11–15</span></div>
+        <ol>
+          <li><span class="num">11</span>ご飯の量と提供タイミングをお客様に伺ってから、香の物と一緒に出す</li>
+          <li><span class="num">12</span>すき焼き・しゃぶしゃぶ提供の準備をする</li>
+          <li><span class="num">13</span>準備は速やかに行う</li>
+          <li><span class="num">14</span>すき焼き・しゃぶしゃぶの調理をする</li>
+          <li><span class="num">15</span>お客様がやりやすいように鍋とコンロの向きを変える</li>
+        </ol>
+      </div>
+
+      <div class="ph">
+        <div class="ph-h"><span class="b">ご滞在中の目配り</span><span class="r"></span><span class="n">STEP 16–20</span></div>
+        <ol>
+          <li><span class="num">16</span>ホールを無人にしない</li>
+          <li><span class="num">17</span>客室内にいる人は、お客様の机の上や表情等の状況を巡回して把握する。ディナーは特にテーブルの上の状況の見回りを強化する</li>
+          <li><span class="num">18</span>オーダーの時はなるべく早くハンディで伝票を打つ</li>
+          <li><span class="num">19</span>お客様のドリンクの残量が残り3割以下になった際には、お代わりを伺う</li>
+          <li><span class="num">20</span>お肉のお皿が空になっている時には、追加のお肉を伺う</li>
+        </ol>
+      </div>
+
+      <div class="ph">
+        <div class="ph-h"><span class="b">お食事の終わり〜お見送り</span><span class="r"></span><span class="n">STEP 21–25</span></div>
+        <ol>
+          <li><span class="num">21</span>食事が終わったら机の上を片付ける。コンロも下げる</li>
+          <li><span class="num">22</span>下げものはなるべくラックに置く。急いでいる場合は一声かける。お客様が最優先だが、洗い場の方への配慮も必要。「お願いします」の一言で仕事がスムーズになる</li>
+          <li><span class="num">23</span>デザートとお茶と伝票を一緒にお持ちする</li>
+          <li><span class="num">24</span>お見送りをしたら、退店後速やかにテーブルチェックのステータスを「リセット済」にする</li>
+          <li><span class="num">25</span>バッシング、拭き上げ、再セットを速やかに行う</li>
+        </ol>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 5-2 -->
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">5-2</span><span class="sec-t">お出迎えとご案内</span></h2>
+  <div class="it">
+    <div class="it-h">コート・荷物の預かり<span class="id">ID 49</span></div>
+    <div class="it-b">
+      <p>入口でコートを預かってから席まで案内する（ランチ・ディナー共通）。各荷物かごにブランケットを用意し、客が荷物を置いたら上からかける。荷物かごは机か椅子の下に入れる（汁はね防止）。閉店作業時に回収して洗濯カゴへ入れる。</p>
+    </div>
+  </div>
+  <div class="it">
+    <div class="it-h">おしぼりの温度<span class="id">ID 161</span></div>
+    <div class="it-b"><p>おしぼりの温度は気温に合わせて調節する。</p></div>
+  </div>
+</div>
+
+<!-- 5-3 -->
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">5-3</span><span class="sec-t">インカム運用</span></h2>
+
+  <div class="it">
+    <div class="it-h">インカムを使う目的<span class="id">ID 87 / 159</span></div>
+    <div class="it-b">
+      <p><b>インカムは必ず装着する。</b></p>
+      <p>インカムは連絡ツールであると同時に、お客様の満足度とスタッフの働きやすさを高めるための道具である。厨房やレジへ戻る往復の時間をなくし、歩数を減らすことで、お客様と向き合う時間を増やせる。歩数を減らせる発信が正義という考え方。また、各自の位置や状況（手が空いているか、接客中か等）を全員でリアルタイムに共有することで、先回りしたフォロー（チームプレイ）につながる。</p>
+      <div class="note"><b>仲間への遠慮は不要</b>　声をかけることをためらう必要はなく、頼まれた側が対応できない場合は「今は無理です」とインカムで伝えてよい。お互い様の考え方で、遠慮なく発信・声かけを行う。</div>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">開店前セットアップ（全員）<span class="id">ID 88</span></div>
+    <div class="it-b">
+      <table>
+        <tr><th>手順</th><th>操作</th><th>理由</th></tr>
+        <tr><td class="k">1　チャンネル確認</td><td>「1」に合わせる</td><td>違うチャンネルだと一人だけ孤立してしまう</td></tr>
+        <tr><td class="k">2　キーロック</td><td>十字ボタンの「左」を長押し</td><td>しゃがんだ時などにボタンが誤って押されるのを防ぐ</td></tr>
+        <tr><td class="k">3　音量調整</td><td>上部のつまみで調整</td><td>店内BGMやガヤガヤした環境でも聞こえる音量にする</td></tr>
+        <tr><td class="k">4　開局テスト</td><td>装着後、必ず誰かとテスト通話<br>「〇〇です、インカムテストお願いします」→「聞こえます、OKです」</td><td>—</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="it" style="page-break-inside:auto">
+    <div class="it-h">話し方の4ルール<span class="id">ID 89</span></div>
+    <div class="it-b">
+      <ol class="rules">
+        <li><div class="rh">押して「0.5秒」待ってから話す</div>
+          <p>ボタンを押した直後は最初の1文字目が途切れやすいため、グッと押して少し間を置いてから話し始める。</p></li>
+        <li><div class="rh">話し終えたら「すぐ」ボタンを離す</div>
+          <p>ボタンを押している間は電波を占有し他の人の声が一切聞こえなくなるため、割り込み防止のため話し終えたらパッと離す。</p></li>
+        <li><div class="rh">「主語（誰に）」と「場所（どこ）」を省かない</div>
+          <p>全員に聞こえているからこそ誰への指示か・どこの席のことかを明確にする。</p>
+          <div class="cmp">
+            <div class="bad"><span class="lb">NG</span>ドリンクできたので提供お願いします</div>
+            <div class="good"><span class="lb">OK</span>〇〇さん、5番テーブルのドリンク準備できたので、提供お願いします！</div>
+          </div></li>
+        <li><div class="rh">「返事」は100%徹底する（接客中を除く）</div>
+          <p>無言は相手を不安にさせ二度手間を生むため、「了解です！」「向かいます！」など短く必ず返答する。ただし目の前のお客様と会話中は返事不要（お客様最優先）。</p></li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">実践トーク例：お客様ご入店時<span class="id">ID 90</span></div>
+    <div class="it-b">
+      <p>入店時の情報をあらかじめ全員に共有することで、厨房は心の準備ができ、フロアはスムーズに席へ誘導できる。</p>
+      <div class="talk">
+        <div class="ln"><div class="who">デシャップ</div><div class="say">お客様ご来店です。大人3名様、どなたか玄関お願いいたします！</div></div>
+        <div class="ln"><div class="who">スタッフA</div><div class="say">ご予約の〇〇様ご来店です。何番テーブルでしょうか？</div></div>
+        <div class="ln"><div class="who">デシャップ</div><div class="say">〇番テーブルです。セッティング完了しているので、そのままご案内ください。ご予約内容は〇〇コースです。</div></div>
+        <div class="ln"><div class="who">スタッフA</div><div class="say">了解です</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="it" style="page-break-inside:auto">
+    <div class="it-h">実践トーク例：テーブル状況説明・オーダー連携<span class="id">ID 91</span></div>
+    <div class="it-b">
+      <p>今、お客様がどういう状態かを実況中継するように発信する。</p>
+      <div class="talk">
+        <div class="ln"><div class="who">接客スタッフ</div><div class="say">〇番テーブルのお客様、ご予約内容の確認が取れました。今からお料理の伝票をハンディで入力します。ドリンクは今悩まれているので、のちほど伺います。</div></div>
+        <div class="ln"><div class="who">接客スタッフ</div><div class="say">〇番テーブル、ファーストドリンクのオーダーいただきました。今伝票飛ばしました。手が空いている方、ご用意お願いいたします。</div></div>
+        <div class="ln"><div class="who">厨房・デシャップ</div><div class="say">了解、ドリンク作ります！サイドテーブル（あるいは所定の場所）に置いておくので、どなたか提供をお願いします！</div></div>
+        <div class="ln"><div class="who">厨房・デシャップ<br>（手が離せない時）</div><div class="say">了解。作るのはできますが、手が離せず配膳ができません！どなたか取りに来てください！</div></div>
+      </div>
+      <div class="warn"><b>注文内容そのものはインカムで言わない。</b>先にハンディで伝票を飛ばす。</div>
+      <div class="cmp">
+        <div class="bad"><span class="lb">NG</span>◯番テーブル様のオーダーいただきました。〇〇牛のすき焼き２、ドリンク〇〇と〇〇です</div>
+        <div class="good"><span class="lb">OK</span>〇番テーブル様のドリンクとフードのオーダー伝票飛ばしました。ドリンク作製お願いいたします。</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">トラブル対応<span class="id">ID 92 / 94</span></div>
+    <div class="it-b">
+      <table>
+        <tr><th>症状</th><th>対処</th></tr>
+        <tr><td class="k">「ザーザー」と雑音が入る／聞こえない</td>
+            <td>電池残量を確認する（少なくなると感度が落ちる）。厨房の奥や電子レンジの近くなど、電波が遮断されやすい場所にいないか確認する。</td></tr>
+        <tr><td class="k">お客様の前で鳴って<br>会話の邪魔になりそう</td>
+            <td>接客に入る直前に音量つまみを少し下げるか、イヤホンを耳から少し浮かせるなどして調整する。<b>ただし接客が終わったらすぐに元の音量に戻す。</b></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 5-4 -->
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">5-4</span><span class="sec-t">キッチンとの連携</span></h2>
+
+  <div class="it">
+    <div class="it-h">オーダー伝達フォーマット<span class="id">ID 10</span></div>
+    <div class="it-b">
+      <div class="fmt">
+        <span class="q">「オーダー入ります。」</span><br>
+        ご予約 ／ ウォークイン ／ 席のみ　<span class="blank"></span>名様<br>
+        前菜 ×<span class="blank"></span>人前　／　お肉の種類（すきやき ／ しゃぶしゃぶ）×<span class="blank"></span>人前<br>
+        締めうどん ×<span class="blank"></span>人前　／　プレート<br>
+        <span class="q">「お願いします。」</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">オーダーの通し方<span class="id">ID 31</span></div>
+    <div class="it-b"><p>先に伝票を出してからキッチンへ声をかける。ハンディをなるべく使用する。キッチンが作業中の時はタイミングを見て声をかける。</p></div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">アレルギー・お子様情報の連携<span class="id">ID 106</span></div>
+    <div class="it-b">
+      <p>アレルギー情報、苦手な食材、お子様がいることによるサビ抜きなどの情報は、<b>メニュー内容にかかわらず必ず事前に</b>ホールから厨房へ共有する。ただし、ホールスタッフも食材に対する知識を深めること。</p>
+      <div class="note"><b>背景</b>　前菜など、含まれる物質が分からない、または理解が浅い場合、ホール側で確認要否を判断するのは危ないため。／
+      テーブルチェック上ではお子様も大人と同じ人数としてカウントされるため、子供の有無を把握しづらい場合がある。</div>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">事前連絡・共有が必要なもの<span class="id">ID 42 / 48</span></div>
+    <div class="it-b">
+      <table>
+        <tr><th>場面</th><th>対応</th></tr>
+        <tr><td class="k">バースデープレート</td><td>提供10分前にキッチンへ声をかける</td></tr>
+        <tr><td class="k">キャンセル発生時</td><td>必ずキッチンにも共有する</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">ホールの洗い物応援<span class="id">ID 30</span></div>
+    <div class="it-b"><p>キッチンスタッフが少ないため、ホールスタッフも積極的に洗い物作業に入る（割烹着貸し出しあり）。</p></div>
+  </div>
+</div>
+
+<!-- 5-5 -->
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">5-5</span><span class="sec-t">すき焼き・しゃぶしゃぶの提供</span></h2>
+
+  <div class="it">
+    <div class="it-h">具材のルール<span class="id">ID 33 / 34 / 35</span></div>
+    <div class="it-b">
+      <table>
+        <tr><th></th><th>入れる</th><th>入れない</th></tr>
+        <tr><td class="k">すき焼き</td><td>—</td><td>しらたき（ディナーも同様）／春菊（サイドテーブルに置く）</td></tr>
+        <tr><td class="k">しゃぶしゃぶ</td><td>おかひじき</td><td>—</td></tr>
+        <tr><td class="k">共通</td><td colspan="2">ねぎはお肉の後（他の野菜と同じタイミング）で入れる</td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">サービス量の判断基準<span class="id">ID 115</span></div>
+    <div class="it-b">
+      <p>基本の提供形は、<b>1枚炊いた後は野菜を鍋に入れ、以降はお客様にお任せする</b>形となっているが、これは、本来はすべて炊いて提供したいところを、多くのお客様に対応するための調整である。<b>ホールスタッフの数に対してお客様が少なく余裕がある場合は、すべて炊いて提供する。</b></p>
+      <div class="note"><b>背景</b>　空いている状況にもかかわらず、お肉を1枚だけ炊いて対応が終わってしまったというお客様の声があったため、この運用を改めて周知するもの。</div>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">取り箸（さえばし）の扱い<span class="id">ID 36</span></div>
+    <div class="it-b"><p>取り箸は2名がけごとに回収する。トングよりお箸を希望する客には置いていく。お箸が使えない外国人客には回収する。</p></div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">締めオーダー時の準備<span class="id">ID 32</span></div>
+    <div class="it-b"><p>締めのオーダー時は、小ねぎ・おたまをあらかじめテーブルに置く（さげ物防止）。</p></div>
+  </div>
+</div>
+
+<!-- 5-6 -->
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">5-6</span><span class="sec-t">締め・デザートの提供</span></h2>
+
+  <div class="it">
+    <div class="it-h">うどんの提供<span class="id">ID 37 / 38 / 39</span></div>
+    <div class="it-b">
+      <table>
+        <tr><td class="k">器</td><td>しゃぶ後のうどん提供時、ポン酢・ごまダレの器は下げずそのままにする</td></tr>
+        <tr><td class="k">すだち</td><td>鍋の中に入れず、うどんの上に1人1枚のせる</td></tr>
+      </table>
+      <div class="talk"><div class="ln"><div class="who">声かけ</div>
+        <div class="say">塩こしょうで味付けしておりますが、お好みでポン酢かごまダレとあえてお召し上がりください</div></div></div>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">茶碗蒸しの声かけ<span class="id">ID 40</span></div>
+    <div class="it-b">
+      <div class="talk"><div class="ln"><div class="who">声かけ</div>
+        <div class="say">かき混ぜてお召し上がりください</div></div></div>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">デザート・お飲み物<span class="id">ID 43 / 125 / 41</span></div>
+    <div class="it-b">
+      <table>
+        <tr><td class="k">抹茶<br>（ディナーコース）</td><td>品質統一のため<b>キッチンで点てる</b></td></tr>
+        <tr><td class="k">和菓子</td><td>スプーンやフォークは使用せず、<b>黒文字</b>を使って提供する</td></tr>
+        <tr><td class="k">瓶飲み物<br>（ジンジャーエール等）</td><td>キャップを取り、そのまま提供する（戻さなくてよい）</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 5-7 -->
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">5-7</span><span class="sec-t">調理器具・什器の扱い</span></h2>
+
+  <div class="it">
+    <div class="it-h">割下の扱い<span class="id">ID 44 / 45</span></div>
+    <div class="it-b">
+      <div class="warn"><b>割下（余り）は必ず元の容器に戻し、バッシング台に置かない。</b>誤って洗ってしまうのを防ぐため。</div>
+      <p style="margin-top:2.4mm">割下（薄めた出汁）は毎日営業終了後に洗う。</p>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">洗い方に注意が必要なもの<span class="id">ID 46 / 47</span></div>
+    <div class="it-b">
+      <table>
+        <tr><th>対象</th><th>禁止</th><th>正しい扱い</th></tr>
+        <tr><td class="k">鉄鍋</td><td>洗剤で洗う</td><td>しっかり乾かして油を引く</td></tr>
+        <tr><td class="k">ねりきりのお皿</td><td>食洗機</td><td>手洗いまたは拭き上げのみ</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 5-8 -->
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">5-8</span><span class="sec-t">レジ・電話・設備の操作</span></h2>
+
+  <div class="it">
+    <div class="it-h">国際電話の掛け方<span class="id">ID 50</span></div>
+    <div class="it-b">
+      <p>テーブルチェックに表示されている番号の頭に <b>010</b> を付ける。</p>
+      <table>
+        <tr><th>表示されている番号</th><th>掛ける番号</th></tr>
+        <tr><td>+886-975-113-665</td><td><b>010</b>-886-975-113-665</td></tr>
+        <tr><td>+1-832-657-3532</td><td><b>010</b>-1832-657-3532</td></tr>
+      </table>
+      <div class="warn">これでかからない場合は回線に応じたダイヤル変更が必要なため<b>経営陣へ連絡する</b>。</div>
+    </div>
+  </div>
+
+  <div class="it" style="page-break-inside:auto">
+    <div class="it-h">iPadの席が消えない時の対応<span class="id">ID 51</span></div>
+    <div class="it-b">
+      <ol class="steps">
+        <li>USENカード読み取り機のホームから「履歴」を押す</li>
+        <li>「取引履歴」から該当金額を探す</li>
+        <li>「売上予定」となっていればOK</li>
+        <li>iPadで「レジ会計」→「その他支払い」</li>
+        <li>決済方法を選択し「残高」を押す</li>
+        <li>「会計完了」で席が消える</li>
+      </ol>
+      <div class="note">トラブル対応のため、まずは先輩スタッフに確認しながらでよい。</div>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">玄関の電気操作<span class="id">ID 52</span></div>
+    <div class="it-b">
+      <table>
+        <tr><td class="k">昼</td><td>下2つを右に倒す（黒が赤く光れば点灯）。明るい昼間は看板・灯篭はつけない</td></tr>
+        <tr><td class="k">玄関の大きい電気</td><td>常時つけたままにする</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- 5-9 -->
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">5-9</span><span class="sec-t">引き継ぎと勤務のルール</span></h2>
+
+  <div class="it">
+    <div class="it-h">ランチ退勤前の引き継ぎ<span class="id">ID 29</span></div>
+    <div class="it-b">
+      <p>ランチ担当者は<b>退勤15分前</b>に次の3点を行う。ランチ→ディナーのバトンタッチは15:00または16:00前。</p>
+      <ol class="steps"><li>引き継ぎ</li><li>整理整頓</li><li>発注物の確認</li></ol>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">退勤時の近隣への配慮<span class="id">ID 119</span></div>
+    <div class="it-b">
+      <div class="warn">退勤後、<b>坂を降りるまでは</b>大声や物音を出さず、静かに歩いて帰る。周辺住民の方から静かにしてほしいとのお声があった。</div>
+    </div>
+  </div>
+
+  <div class="it">
+    <div class="it-h">気づいたことの伝え方<span class="id">ID 145</span></div>
+    <div class="it-b"><p>マニュアル運用開始後は、ノートにマニュアルで扱う内容を書かない運用にする。マニュアルに追記したい内容がある場合は、LINEなどで経営陣にエスカレーションする。</p></div>
+  </div>
+</div>
+</section>
+<!-- ══════════ 第6章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 6 章</div>
+  <div class="ch-nm">清掃・衛生</div>
+  <p class="ch-ld">布の使い分け、清掃の手順、器具の衛生管理をまとめています。ダスターは色で用途が決まっているため、使う前に必ず確認してください。手が空いた時間にやることは章末のリストにまとめています。</p>
+  <div class="ch-mp"><span>6-1 ダスターの色分け</span><span>6-2 清掃の手順</span><span>6-3 器具・容器の管理</span><span>6-4 アイドルタイムにやること</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">6-1</span><span class="sec-t">ダスターの色分け</span></h2>
+  <div class="it"><div class="it-h">色ごとの用途<span class="id">ID 53</span></div>
+    <table>
+      <tr><th>色</th><th>用途</th></tr>
+      <tr><td class="k"><span class="sw" style="background:#3f6fb5"></span>青</td><td>客室＆キッチンの机（<b>アルコールのみ使用</b>）</td></tr>
+      <tr><td class="k"><span class="sw" style="background:#4f9c6b"></span>緑</td><td>客室のいす（ない場合はピンクで代用）</td></tr>
+      <tr><td class="k"><span class="sw" style="background:#9a9a9a"></span>灰色</td><td>客室でお客様の目の前で拭く時</td></tr>
+      <tr><td class="k"><span class="sw" style="background:#e8dcc8"></span>タオル生地</td><td>キッチンで手を拭く</td></tr>
+      <tr><td class="k"><span class="sw" style="background:#d98aa8"></span>ピンク</td><td>ホールの椅子／キッチンの食器やグラスの汁はね用</td></tr>
+    </table>
+  </div>
+  <div class="it"><div class="it-h">拭き上げ用布の使い分け<span class="id">ID 113</span></div>
+    <div class="it-b"><p>拭き上げに使う布は用途で使い分ける。タオル生地：手を拭く用・洗い物用。青いダスター：机・お盆用。ピンクのダスター：グラス・食器用。</p></div></div>
+  <div class="it"><div class="it-h">ダスターの交換・消毒<span class="id">ID 55</span></div>
+    <table>
+      <tr><td class="k">ランチ終了後</td><td>青・ピンク・グレーは新しいものに交換する</td></tr>
+      <tr><td class="k">ディナー終了後</td><td>ボウルに水で薄めた漂白剤につける<br><small>つける前に食べかすを除去し水洗いする</small></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">6-2</span><span class="sec-t">清掃の手順</span></h2>
+  <div class="it"><div class="it-h">テーブル清掃の手順<span class="id">ID 56</span></div>
+    <div class="it-b">
+      <ol class="steps"><li>中性洗剤入りタオルで拭く</li><li>アルコール拭きを行う</li></ol>
+      <div class="note">アルコールだけでは油が落ちないため、必ず2段階で行う。</div>
+    </div>
+  </div>
+  <div class="it"><div class="it-h">トイレ清掃ルール<span class="id">ID 57</span></div>
+    <table>
+      <tr><td class="k">ディナー締め時</td><td>ペーパー類をまとめて捨てる／男性用縦長トイレの使い捨てマットを交換する</td></tr>
+      <tr><td class="k">暑くなる時期</td><td>ディナー締め時にトイレのゴミも回収して捨てる（<b>虫防止</b>）</td></tr>
+      <tr><td class="k">土日祝</td><td>2名体制（男女兼用と女性スタッフ）で対応する</td></tr>
+    </table>
+  </div>
+  <div class="it"><div class="it-h">メニューブックの消毒<span class="id">ID 60</span></div>
+    <div class="it-b"><p>メニューブックのビニールは毎日アルコールで拭く。</p></div></div>
+  <div class="it"><div class="it-h">ビール樽下の清掃注意<span class="id">ID 130</span></div>
+    <div class="it-b"><p>ビールの樽の下は汚れが溜まりやすい箇所である。</p></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">6-3</span><span class="sec-t">器具・容器の管理</span></h2>
+  <div class="it"><div class="it-h">アルコール容器の扱い<span class="id">ID 54</span></div>
+    <div class="it-b"><p>アルコールは使い終わったら先端を回して口を閉じる（液漏れ防止）。</p></div></div>
+  <div class="it"><div class="it-h">水を替えるもの・その都度掃除するもの<span class="id">ID 58 / 59</span></div>
+    <table>
+      <tr><td class="k">しゃもじ・菜箸</td><td>ランチ終了後に必ず中の水を入れ替える</td></tr>
+      <tr><td class="k">炊飯器</td><td>まわりについているお米をそのつど取り除く</td></tr>
+    </table>
+  </div>
+  <div class="it"><div class="it-h">作業台の整理とダスターの常備<span class="id">ID 162</span></div>
+    <div class="it-b"><p>作業台の上はなるべく広く綺麗にするように努める。作業台の上にはダスターを用意しておく。</p></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">6-4</span><span class="sec-t">アイドルタイムにやること</span></h2>
+  <div class="it loose"><div class="it-h">手が空いた時間にやることの一覧（18項目）<span class="id">ID 148</span></div>
+    <ol class="steps">
+      <li>トイレ掃除</li><li>欄間の清掃</li><li>壁の清掃</li><li>窓の清掃</li>
+      <li>拭き上げ済みのグラスを再度拭く</li><li>作業台や飯台の物をどかして拭きあげる</li>
+      <li>玄関や周囲の掃き掃除</li><li>庭の掃き掃除</li>
+      <li>メニューブックをアルコールで拭く</li><li>厨房内の床の清掃、掃き掃除</li>
+      <li>エアコンのフィルターの掃除</li><li>換気扇の清掃</li><li>予約の確認</li>
+      <li>店内装飾品の掃除</li><li>除湿機の水を捨てる（2時間に一度）</li>
+      <li>Googleプロフィールに掲載するための写真の撮影と共有</li>
+      <li>玄関のたたきを掃除する</li><li>客室タブレットの手あかをふき取る</li>
+    </ol>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 第7章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 7 章</div>
+  <div class="ch-nm">備品・在庫</div>
+  <p class="ch-ld">備品の保管場所、在庫の記録方法、報告のルールをまとめています。「ラスト1つを使ったら報告」など、次の人が困らないための決まりが中心です。</p>
+  <div class="ch-mp"><span>7-1 保管場所</span><span>7-2 季節備品</span><span>7-3 在庫の記録</span><span>7-4 報告のルール</span><span>7-5 納品物の対応</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">7-1</span><span class="sec-t">保管場所</span></h2>
+  <div class="it loose"><div class="it-h">備品・食材の保管場所一覧（16項目）<span class="id">ID 62</span></div>
+    <table>
+      <tr><th>品目</th><th>保管場所</th></tr>
+      <tr><td class="k">おしぼり</td><td>4番・8番の部屋（おしぼり受けと一緒）</td></tr>
+      <tr><td class="k">おしぼり用ヒノキ香料</td><td>レジ上の引き出し</td></tr>
+      <tr><td class="k">コースター</td><td>4卓・8番裏スペース＋2階段ボール</td></tr>
+      <tr><td class="k">抹茶（開封前）</td><td>冷凍庫</td></tr>
+      <tr><td class="k">抹茶（開封後）</td><td>冷蔵庫</td></tr>
+      <tr><td class="k">抹茶ストック</td><td>卵の冷蔵庫</td></tr>
+      <tr><td class="k">ポン酢・ごまだれ・割下<br><small>（開封済み）</small></td><td>縦型の小型冷蔵庫（グレーの冷蔵庫）</td></tr>
+      <tr><td class="k">割下ストック<br><small>（未開封）</small></td><td>食洗機向かいの冷蔵庫（おしぼり機下ではない）</td></tr>
+      <tr><td class="k">湘南ゴールドサイダー・<br>ジンジャーエール</td><td>ワインストックと同じ扉（めぐみさん部屋前のみ、廊下不可）</td></tr>
+      <tr><td class="k">子ども用スプーン・フォーク</td><td>8卓横の引き出し</td></tr>
+      <tr><td class="k">コロコロ</td><td>11卓裏</td></tr>
+      <tr><td class="k">床フローリング用ワイパー</td><td>洗い場ラック横</td></tr>
+      <tr><td class="k">ウェットシート</td><td>洗い場下のケース</td></tr>
+      <tr><td class="k">名刺・ショップカード</td><td>2F仏間のプリンター横</td></tr>
+      <tr><td class="k">カセットボンベ（使用中）</td><td>8卓・4卓の部屋の棚の中</td></tr>
+      <tr><td class="k">落とし物</td><td>クロークの紙袋（設置済み）</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">7-2</span><span class="sec-t">季節備品</span></h2>
+  <div class="it"><div class="it-h">ランチョンマットの季節順<span class="id">ID 61</span></div>
+    <div class="seq">
+      <div class="n"><b>桜</b><small>卓の収納</small></div><div class="ar">▶</div>
+      <div class="n"><b>藤の花</b><small>桜と同じ場所に在庫</small></div><div class="ar">▶</div>
+      <div class="n"><b>アヤメ</b><small>東京に在庫<br>5月〜</small></div><div class="ar">▶</div>
+      <div class="n"><b>あじさい</b><small>従業員入口・ビール横</small></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">7-3</span><span class="sec-t">在庫の記録</span></h2>
+  <div class="it"><div class="it-h">在庫管理表の記入先<span class="id">ID 63</span></div>
+    <table>
+      <tr><th>対象</th><th>記入先</th></tr>
+      <tr><td class="k">ドリンク以外</td><td>ホワイトボードの在庫管理表（作成済み）。都度残数を確認して記入する</td></tr>
+      <tr><td class="k">ドリンク</td><td>iPad内の在庫管理に入力する</td></tr>
+    </table>
+  </div>
+  <div class="it"><div class="it-h">発注のまとめ方<span class="id">ID 64</span></div>
+    <div class="it-b"><p>発注はホールスタッフが担当し、送料節約のためまとめて発注する。</p></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">7-4</span><span class="sec-t">報告のルール</span></h2>
+  <div class="it"><div class="it-h">ラスト1つの報告<span class="id">ID 66</span></div>
+    <div class="it-b"><div class="warn"><b>ラスト1つを使った人は、必ず全員に報告する。</b></div></div></div>
+  <div class="it"><div class="it-h">たまごの在庫報告<span class="id">ID 65</span></div>
+    <div class="it-b"><p>たまご3種はなくなる前に必ず全員へ報告し、添田さんへ声をかける。</p></div></div>
+  <div class="it"><div class="it-h">壊れ物の記録<span class="id">ID 67</span></div>
+    <div class="it-b"><p>壊れ物はジャポニカ連絡帳に記録する。</p>
+      <div class="note">責任追及ではなく<b>物量管理のため</b>。</div></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">7-5</span><span class="sec-t">納品物の対応</span></h2>
+  <div class="it"><div class="it-h">開梱・格納はホール担当<span class="id">ID 101</span></div>
+    <div class="it-b"><p>届いた荷物は勝手口付近に置かれる。ドリンク在庫などホール管轄の荷物は、<b>開梱・所定の場所への配置・段ボールを潰すところまで</b>を接客スタッフが行う。</p>
+      <div class="note">勝手口は目につきにくく放置されがちなため、気づいた人が対応する。</div></div></div>
+</div>
+</section>
+
+<!-- ══════════ 第8章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 8 章</div>
+  <div class="ch-nm">発注・仕入れ</div>
+  <p class="ch-ld">取引先ごとの発注方法と、ビールサーバーの洗浄手順をまとめています。発注は着日が決まっているため、ストックの残りを見て早めに動いてください。</p>
+  <div class="ch-mp"><span>8-1 「いまでや」の発注</span><span>8-2 鎌倉ビールの発注</span><span>8-3 ビールサーバー洗浄</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">8-1</span><span class="sec-t">「いまでや」の発注</span></h2>
+  <div class="it"><div class="it-h">発注手順<span class="id">ID 68</span></div>
+    <ol class="steps">
+      <li>Safariのお気に入りに登録された「いまでや」のアイコンを押しホームページに移動</li>
+      <li>保存済みパスワードを入力</li>
+      <li>発注したい商品を検索してカートに入れ注文する</li>
+    </ol>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">8-2</span><span class="sec-t">鎌倉ビールの発注</span></h2>
+  <div class="it"><div class="it-h">発注方法とタイミング<span class="id">ID 69</span></div>
+    <div class="it-b">
+      <p>ビールサーバーに貼ってある名刺のメールアドレスへiPadから発注する。<b>発注タイミングはストックが1本になり次第。</b></p>
+      <table>
+        <tr><th>発注</th><th>着日</th></tr>
+        <tr><td class="k">平日 AM</td><td>翌日着</td></tr>
+        <tr><td class="k">平日 PM</td><td>翌々日着</td></tr>
+        <tr><td class="k">金曜</td><td>月曜着</td></tr>
+      </table>
+      <div class="note">急ぎの場合は mobile の番号に電話する。</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">8-3</span><span class="sec-t">ビールサーバー洗浄手順（閉店時）</span></h2>
+  <div class="it loose"><div class="it-h">洗浄の手順<span class="id">ID 70</span></div>
+    <ol class="steps">
+      <li>洗浄タンクに水を入れる</li>
+      <li>ヘッドをビール缶から洗浄タンクに付け替える（タンクを逆さに）</li>
+      <li>ビールと同じように水を出す</li>
+      <li>ガス抜きボタンを押し洗浄タンクのガスを必ず抜く</li>
+      <li>ヘッドを元に戻す（レバーを引き上げてから洗浄）</li>
+      <li>もう一度タンクに水を入れる</li>
+      <li>ヘッドの裏からスポンジを1つ入れる</li>
+      <li>ノズルを外し棒を反対側に付け替える（中の棒を表側に）</li>
+      <li>スポンジが出るまで水を通す（7・8を繰り返す）</li>
+      <li>ノズルを元に戻して完了</li>
+    </ol>
+    <div class="warn"><b>ガス抜きは必ず行う</b>（手順4）。</div>
+    <table>
+      <tr><td class="k">ビールサーバーのゴミ箱フタ</td><td>下げ台の下（おしぼりの横）へ置く</td></tr>
+      <tr><td class="k">ビールの樽</td><td>交換後に外のゴミ箱横に出す</td></tr>
+    </table>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 第9章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 9 章</div>
+  <div class="ch-nm">設備・機器</div>
+  <p class="ch-ld">電源・充電、空調と窓、コンロなどの扱いをまとめています。充電切れは営業に直接影響するため、電源まわりは特に気をつけてください。</p>
+  <div class="ch-mp"><span>9-1 電源・充電</span><span>9-2 空調と窓</span><span>9-3 コンロ・その他</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">9-1</span><span class="sec-t">電源・充電</span></h2>
+  <div class="it"><div class="it-h">蓄電池の運用<span class="id">ID 71</span></div>
+    <div class="it-b">
+      <p>設置場所は冷蔵庫横・炊飯器下。蓄電池の充電を抜いてから、その機器から電気をもらう機器（炊飯器・iPad充電など）をつける。</p>
+      <div class="warn">夜の片付け時は<b>必ず充電してから帰る</b>。</div>
+    </div>
+  </div>
+  <div class="it loose"><div class="it-h">iPad・タブレット・カードリーダーの注意事項<span class="id">ID 72</span></div>
+    <table>
+      <tr><th>機器</th><th>注意事項</th></tr>
+      <tr><td class="k">iPad（新規導入）</td><td>8番卓横のサイドに設置。テーブルチェック・伝票打ちの両方に使用可能</td></tr>
+      <tr><td class="k">タブレット</td><td>充電切れで<b>出勤打刻ができなくなる</b></td></tr>
+      <tr><td class="k">カードリーダー</td><td><b>8%以上ないと決済不可。</b>0からの充電は15分以上かかる（壁コンセントの方が早い）<br>エラー発生時は再起動で直ることがある</td></tr>
+    </table>
+  </div>
+  <div class="it"><div class="it-h">ハンディの充電ルール<span class="id">ID 73</span></div>
+    <div class="it-b"><p>営業中の空き時間にこまめに充電する。</p>
+      <div class="warn">夜にハンディを充電すると<b>iPadが充電切れになる</b>ため注意する。</div></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">9-2</span><span class="sec-t">空調と窓</span></h2>
+  <div class="it"><div class="it-h">エアコンの消し忘れ防止<span class="id">ID 127</span></div>
+    <div class="it-b"><p>エアコンの消し忘れが多いため、<b>旧式のリモコンは使用しない。</b></p>
+      <div class="note">旧式リモコンは複数の室内機を一括操作するのに工夫が必要で、消し忘れの原因になりやすい。</div></div></div>
+  <div class="it"><div class="it-h">窓・ふすまの開閉<span class="id">ID 75 / 138 / 146</span></div>
+    <table>
+      <tr><th>場所</th><th>扱い</th></tr>
+      <tr><td class="k">客室の窓</td><td>昼夜とも<b>新しい窓のみ閉め</b>、古い方の窓は景色のため開けておく</td></tr>
+      <tr><td class="k">トイレへの通路の突き当たり<br><small>（暖簾がかかっている場所）</small></td><td>窓は閉めておく（冷気が逃げるのを防ぐため）</td></tr>
+      <tr><td class="k">玄関と廊下の間のふすま</td><td>冷房効果を高めたい場合は閉める</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">9-3</span><span class="sec-t">コンロ・その他</span></h2>
+  <div class="it"><div class="it-h">カセットコンロの統一・手入れ<span class="id">ID 116</span></div>
+    <div class="it-b">
+      <p>お客様の目に触れるカセットコンロは、<b>イワタニ製の高級感のあるモデルに統一</b>する。使用後はスポンジで手洗いし、グラス用クロスで拭き上げる。</p>
+      <div class="note">お客様にお出しする備品のため、指紋や水滴が残らないようにする。</div>
+    </div>
+  </div>
+  <div class="it"><div class="it-h">水の元栓<span class="id">ID 74</span></div>
+    <div class="it-b"><div class="warn">洗濯機につながっている水の元栓は<b>閉めない</b>。</div></div></div>
+  <div class="it"><div class="it-h">蚊取り線香（夏期）<span class="id">ID 76</span></div>
+    <div class="it-b"><p>朝担当は夏期に蚊取り線香を忘れない。</p></div></div>
+</div>
+</section>
+<!-- ══════════ 第10章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 10 章</div>
+  <div class="ch-nm">安全管理</div>
+  <p class="ch-ld">火とお客様の安全に関わる決まりをまとめています。この章は事故につながるものだけを集めています。特にカセットボンベの扱いは必ず守ってください。</p>
+  <div class="ch-mp"><span>10-1 カセットボンベの取り扱い</span><span>10-2 火まわりの注意</span><span>10-3 床とお客様の安全</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">10-1</span><span class="sec-t">カセットボンベの取り扱い</span></h2>
+  <div class="it"><div class="it-h">火力は中火を厳守<span class="id">ID 77</span></div>
+    <div class="it-b">
+      <div class="danger"><b>カセットボンベは中火使用を厳守する。</b><br>
+      MAXにするとボンベまで火が届き、<b>爆発の危険がある。</b></div>
+    </div>
+  </div>
+  <div class="it"><div class="it-h">営業中のボンベ交換<span class="id">ID 78</span></div>
+    <div class="it-b"><p>カセットボンベは残量がほぼゼロでない限り、営業中の交換は避ける。</p></div></div>
+  <div class="it"><div class="it-h">空ボンベの廃棄<span class="id">ID 80</span></div>
+    <div class="it-b">
+      <ol class="steps">
+        <li>穴を開けてガスを抜く</li>
+        <li>廊下のゴミ箱（折りばりの横の缶）へ捨てる</li>
+      </ol>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">10-2</span><span class="sec-t">火まわりの注意</span></h2>
+  <div class="it"><div class="it-h">夏場の着物への注意<span class="id">ID 79</span></div>
+    <div class="it-b">
+      <div class="danger">夏は<b>着物の裾が燃えやすくなる</b>ため特に注意（消火スプレーが薄いため）。</div>
+    </div>
+  </div>
+  <div class="it"><div class="it-h">荷物かごの配置<span class="id">ID 136</span></div>
+    <div class="it-b">
+      <p>荷物かごは布をかけて、机の下か椅子の下に入れる。接客の際、自分の通り道には絶対に置かない。食器を落としたりこぼした時に荷物が汚れないため。</p>
+      <div class="warn">また、<b>火が燃え移る高さには置かない。</b></div>
+    </div>
+  </div>
+  <div class="it"><div class="it-h">客室に不要な機材を置かない<span class="id">ID 137</span></div>
+    <div class="it-b"><p>電源が入っていない、使用していない機材（蚊取り線香、サーキュレーターなど）は客室内に置かない。</p></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">10-3</span><span class="sec-t">床とお客様の安全</span></h2>
+  <div class="it"><div class="it-h">床の異物・破片への注意<span class="id">ID 107</span></div>
+    <div class="it-b">
+      <p>営業中・清掃・締め作業の際は、トイレを含む店内の床に破損物やゴミが落ちていないか、こまめに確認する。</p>
+      <div class="warn">お客様が踏んで<b>怪我をする事故を防ぐため。</b></div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 第11章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 11 章</div>
+  <div class="ch-nm">予約・レジ</div>
+  <p class="ch-ld">電話対応、予約の登録・変更、会計の操作をまとめています。予約システムのボタン操作は押し忘れるとダブルブッキングにつながるため、手順どおりに進めてください。</p>
+  <div class="ch-mp"><span>11-1 電話対応</span><span>11-2 予約の確認と連絡</span><span>11-3 予約の登録・変更</span><span>11-4 会計</span><span>11-5 その他の注意</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">11-1</span><span class="sec-t">電話対応</span></h2>
+  <div class="it"><div class="it-h">電話の受け方<span class="id">ID 173</span></div>
+    <div class="it-b">
+      <div class="talk">
+        <div class="ln"><div class="who">第一声</div><div class="say">お電話ありがとうございます。Sashoでございます。</div></div>
+        <div class="ln"><div class="who">ご予約の場合</div><div class="say">ご予約のお電話でございますね。ありがとうございます。ご希望のお日にちと人数様をお伺いできますでしょうか。</div></div>
+      </div>
+      <div class="note">テーブルチェックを見て空いていたら承る。</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">11-2</span><span class="sec-t">予約の確認と連絡</span></h2>
+  <div class="it"><div class="it-h">予約確認はこまめに行う<span class="id">ID 171</span></div>
+    <div class="it-b"><p>予約の確認をこまめに行い、気付いたことがあれば共有する。</p></div></div>
+  <div class="it loose"><div class="it-h">バースデープレート・個室利用の確認方法<span class="id">ID 123</span></div>
+    <div class="it-b">
+      <p>予約メモにバースデープレートや個室利用の記載があるお客様には、以下の方法で確認する。</p>
+      <table>
+        <tr><th>お客様</th><th>連絡方法</th></tr>
+        <tr><td class="k">日本の電話番号</td><td>お電話で確認する</td></tr>
+        <tr><td class="k">海外のお客様</td><td>時差や通話料金を考慮し、レジと同じiPadのGmailアプリからメールで確認する</td></tr>
+      </table>
+      <div class="warn">メール送信時は、対応者が分かるよう<b>メール末尾に自分の名前を記載</b>する。<br>
+      メールを送信したお客様は、<b>必ず予約メモ欄にその旨を記入</b>する。</div>
+    </div>
+  </div>
+  <div class="it"><div class="it-h">メール対応時のCCルール<span class="id">ID 124</span></div>
+    <div class="it-b"><p>sashokamakuraのメールでやり取りする際は、ccにinfoアドレスを入れる。</p></div></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">11-3</span><span class="sec-t">予約の登録・変更</span></h2>
+  <div class="it"><div class="it-h">予約ボタンの使い分け<span class="id">ID 81 / 174</span></div>
+    <div class="it-b">
+      <table>
+        <tr><th>対象</th><th>ボタン</th></tr>
+        <tr><td class="k">当日の新規・変更予約</td><td><b>上ボタン</b></td></tr>
+        <tr><td class="k">翌日以降の新規・変更予約</td><td><b>下ボタン</b></td></tr>
+      </table>
+      <div class="danger">予約の追加・変更があった場合は、当日ボタンor翌日以降ボタンを<b>忘れずに押す。</b><br>
+      押さないと他の予約サイトで予約を閉じる作業ができないため、<b>ダブルブッキングの可能性が上がる。</b></div>
+    </div>
+  </div>
+  <div class="it"><div class="it-h">「お席のみご予約」の管理（GW期間）<span class="id">ID 82</span></div>
+    <div class="it-b">
+      <p>3パターンで管理する。</p>
+      <table>
+        <tr><td class="k">①</td><td>ご注文確定</td></tr>
+        <tr><td class="k">②</td><td>折り返しのお願い済み</td></tr>
+        <tr><td class="k">③</td><td>お電話出ず・留守電</td></tr>
+      </table>
+      <div class="note">②③はいずれも「お電話出ず」の色に変更済み。</div>
+    </div>
+  </div>
+  <div class="it"><div class="it-h">テーブルチェックのリセット運用<span class="id">ID 135</span></div>
+    <div class="it-b">
+      <p>お客様が退店されたらTableCheckのステータスを「リセット済」にすること。</p>
+      <div class="warn">これをやらないと<b>席が空いているのにネット予約を受けられなくなる。</b></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">11-4</span><span class="sec-t">会計</span></h2>
+  <div class="it"><div class="it-h">旧料金の会計<span class="id">ID 83</span></div>
+    <div class="it-b">
+      <p>旧料金タブはUsenレジの1番下にある。テーブルチェックで<b>緑色表示</b>の予約は旧料金で打つ。</p>
+      <div class="warn"><b>金額ではなく色で確認する。</b></div>
+    </div>
+  </div>
+  <div class="it"><div class="it-h">プラン・決済方法別のレジ操作<span class="id">ID 84 / 126</span></div>
+    <table>
+      <tr><th>ケース</th><th>操作</th></tr>
+      <tr><td class="k">オズモールプラン<br><small>（金額が決まっている場合）</small></td><td>レジ会計にプレート込みのボタンがある</td></tr>
+      <tr><td class="k">事前決済</td><td>値引き操作によって金額を調整する</td></tr>
+    </table>
+  </div>
+  <div class="it"><div class="it-h">キャンセル料請求の判断基準<span class="id">ID 108</span></div>
+    <div class="it-b">
+      <p>キャンセルの連絡が電話であった場合も、<b>基本的にキャンセル料請求の対象とする。</b>ただし、やむを得ない事情がある場合は請求しない。</p>
+      <div class="note">請求するかどうか<b>判断に迷う場合は、責任者に確認する。</b></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">11-5</span><span class="sec-t">その他の注意</span></h2>
+  <div class="it"><div class="it-h">駐車場の案内注意<span class="id">ID 85</span></div>
+    <div class="it-b">
+      <div class="warn">寿福寺近くのパーキングは<b>なくなった</b>ため、客に案内しないよう注意する。</div>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 第12章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 12 章</div>
+  <div class="ch-nm">調理・仕込み</div>
+  <p class="ch-ld">ホールスタッフが行う仕込みの作業をまとめています。</p>
+  <div class="ch-mp"><span>12-1 チョコペンの作り方</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">12-1</span><span class="sec-t">チョコペンの作り方</span></h2>
+  <div class="it"><div class="it-h">作り方<span class="id">ID 86</span></div>
+    <div class="it-b">
+      <ol class="steps">
+        <li>クッキングシートを約20cm切る</li>
+        <li>長い辺に短い辺を合わせてコーン状に丸める（先端を細くする）</li>
+      </ol>
+    </div>
+  </div>
+</div>
+</section>
+
+<!-- ══════════ 第13章 ══════════ -->
+<section class="ch">
+<div class="ch-open">
+  <div class="ch-eb">第 13 章</div>
+  <div class="ch-nm">身だしなみ</div>
+  <p class="ch-ld">勤務中の身だしなみの基準です。お客様に清潔感と安心感を持っていただくための決まりで、頭髪・服装は男性と女性で基準が異なります。出勤前に自分で確認してください。</p>
+  <div class="ch-mp"><span>13-1 頭髪</span><span>13-2 服装</span><span>13-3 アクセサリー</span><span>13-4 爪</span><span>13-5 共通事項</span></div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">13-1</span><span class="sec-t">頭髪</span></h2>
+  <div class="it loose"><div class="it-h">基準<span class="id">ID 95</span></div>
+    <div class="it-b">
+      <p>頭髪は清潔感があり、食品を扱う場にふさわしい状態を保つこと。<b>過度な染色、奇抜な髪色・ヘアスタイルは不可。</b>勤務中に髪の毛が料理やテーブル上に落ちないよう、必要に応じて整髪料、ヘアピン、ヘアゴム等を使用し適切にまとめる。</p>
+      <table>
+        <tr><th>男性スタッフ</th><th>女性スタッフ</th></tr>
+        <tr>
+          <td>
+            ・襟足はシャツの襟にかからない長さにする<br>
+            ・サイドは耳が出る長さにする（難しい場合は整髪料等で清潔感のある形に整える）<br>
+            ・前髪は目にかからない長さにする（難しい場合は整髪料等で上げる、または流す）<br>
+            ・髪の毛が抜け落ちにくいよう整髪料等で適切にまとめる
+          </td>
+          <td>
+            ・髪が長い場合はお団子またはアップスタイルにする（<b>ポニーテールのみの髪型は不可</b>）<br>
+            ・髪が短い場合も勤務中に髪が顔にかからないよう必要に応じてピン等で留める<br>
+            ・前髪およびサイドの髪は下を向いた際に顔にかからないようにまとめる<br>
+            ・勤務中に手で髪をかき上げる動作をしなくて済むよう、あらかじめ整えておく
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">13-2</span><span class="sec-t">服装</span></h2>
+  <div class="it loose"><div class="it-h">基準<span class="id">ID 96</span></div>
+    <div class="it-b">
+      <p>服装は清潔感があり、Sashoの雰囲気にふさわしいものを着用すること。制服は常に清潔な状態を保ち、汚れやしわが目立つ場合は速やかに交換または手入れを行う。</p>
+      <table>
+        <tr><th>男性スタッフ</th><th>女性スタッフ</th></tr>
+        <tr>
+          <td>
+            ・ズボンは黒、ダークグレー、紺のいずれかの無地のストレートタイプ（<b>スウェット、カーゴパンツ、ダメージ加工のあるズボンは不可</b>）<br>
+            ・スラックスタイプの清潔感のあるものを着用し、シルエットは太すぎないもの、裾を引きずらない適切な長さにする<br>
+            ・上半身は白いTシャツの上から指定の制服を着用する
+          </td>
+          <td>
+            ・指定の制服を着用する<br>
+            ・制服は清潔な状態を保ち、汚れ、しわ、ほつれ等が目立つ場合は速やかに整える
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">13-3</span><span class="sec-t">アクセサリー</span></h2>
+  <div class="it loose"><div class="it-h">着用の可否<span class="id">ID 97</span></div>
+    <div class="it-b">
+      <table>
+        <tr><th>対象</th><th>扱い</th></tr>
+        <tr><td class="k">ホールスタッフ</td><td>シンプルな腕時計・結婚指輪を除き、アクセサリーの着用を<b>禁止</b></td></tr>
+        <tr><td class="k">厨房スタッフ</td><td>勤務中は<b>結婚指輪・腕時計も着用不可</b></td></tr>
+      </table>
+      <p style="margin-top:2.4mm">ピアス（下記参照）、ネックレス、ブレスレット、装飾性の高い指輪、腕時計等は衛生面および接客時の印象を考慮し勤務前に外す。ただし業務上必要なものや会社が認めたものはこの限りではない。</p>
+      <div class="note"><b>ピアスに関する規定</b><br>
+        ・耳たぶに密着する小型のスタッツ式（キャッチ式）ピアス<br>
+        ・フォーマルな印象を与える一粒パールのピアス<br>
+        ・地金のみのシンプルなデザイン（ゴールド、シルバー等）で、直径5mm程度までの目立たないもの
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">13-4</span><span class="sec-t">爪</span></h2>
+  <div class="it"><div class="it-h">基準<span class="id">ID 98</span></div>
+    <div class="it-b">
+      <p>爪は常に短く清潔に整え、料理や食器に触れる際に衛生上の不安を与えない状態を保つこと。爪先は手のひら側から見て大きく出ない長さを目安とし、爪の間に汚れが残らないよう注意する。</p>
+      <div class="warn">奇抜な色のマニキュア、ストーン等の装飾は異物混入や衛生管理上の観点から<b>勤務中は禁止。</b></div>
+      <div class="note">手指に傷がある場合は必要に応じて絆創膏や手袋を使用し、<b>責任者に報告する。</b></div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <h2 class="sec-h"><span class="sec-n">13-5</span><span class="sec-t">共通事項</span></h2>
+  <div class="it"><div class="it-h">出勤前の確認<span class="id">ID 99</span></div>
+    <div class="it-b">
+      <p>スタッフは勤務前に自身の身だしなみを確認し、清潔感を損なう状態で勤務に入らないよう注意する。身だしなみが本規定に適合していないと判断される場合、会社または責任者は改善を求めることがある。</p>
+      <div class="note">Sashoの空間、料理、接客品質をより良いものとしてお客様に感じていただくため、全スタッフが身だしなみを<b>大切な接客品質の一部</b>として意識する。</div>
+    </div>
+  </div>
+</div>
+</section>
+
