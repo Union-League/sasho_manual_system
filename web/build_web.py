@@ -9,7 +9,9 @@ index.html は手を入れない（データだけ差し替わる）。
 """
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
-import os, json, datetime
+import os, re, json, datetime
+
+RE_FIGSHEET = re.compile(r'^ID\d+$')
 
 SA = os.path.expanduser('~/.sasho/service-account.json')
 DB = '1VxEepC6PHtTO_Ic1JckaKMP9lItFCqhLLc5cpE2Gkkk'
@@ -27,10 +29,12 @@ def main(generated=None):
         SA, scopes=['https://www.googleapis.com/auth/spreadsheets.readonly'])
     svc = build('sheets', 'v4', credentials=creds)
 
-    # CL_ で始まるシートを動的に列挙（枚数を決め打ちしない）
+    # 別シートを動的に列挙（枚数を決め打ちしない）
+    #   CL_○○ = チェックリスト / ID○○ = 図表（1ID1シート）
     meta = svc.spreadsheets().get(spreadsheetId=DB).execute()
-    cl_names = [s['properties']['title'] for s in meta['sheets']
-                if s['properties']['title'].startswith('CL_')]
+    titles = [s['properties']['title'] for s in meta['sheets']]
+    cl_names = [t for t in titles if t.startswith('CL_')]
+    fig_names = [t for t in titles if RE_FIGSHEET.match(t)]
 
     cl = {}
     for name in cl_names:
@@ -39,30 +43,36 @@ def main(generated=None):
         cl[name] = [str(r[1]).strip() for r in vals[2:]
                     if len(r) >= 2 and str(r[0]).strip() and str(r[1]).strip()]
 
-    # 図表シート（ID単位で表・配置図などの中身を持つ）
+    # 図表シート「ID○○」: A1=【タイトル】/ B1=表示形式 / 2行目=列見出し / 3行目以降=データ
     figs, fig_kind = {}, {}
-    fv = svc.spreadsheets().values().get(
-        spreadsheetId=DB, range="'図表'!A3:H500").execute().get('values', [])
-    for r in fv:
-        if not r or not str(r[0]).strip():
+    for name in fig_names:
+        vals = svc.spreadsheets().values().get(
+            spreadsheetId=DB, range=f"'{name}'!A1:H200").execute().get('values', [])
+        if not vals:
             continue
-        fid = str(r[0]).strip()
-        kind = (r[1] if len(r) > 1 else '').strip()
-        cells = [(r[i] if i < len(r) else '').strip() for i in range(2, 8)]
-        while cells and not cells[-1]:
-            cells.pop()
-        if not cells:
-            continue
-        figs.setdefault(fid, []).append(cells)
-        if kind:
-            fig_kind[fid] = kind
+        head = vals[0] if vals else []
+        fig_kind[name] = (head[1].strip() if len(head) > 1 else '')
+        rows_f = []
+        for r in vals[1:]:
+            cells = [str(r[i]).strip() if i < len(r) else '' for i in range(6)]
+            while cells and not cells[-1]:
+                cells.pop()
+            if cells:
+                rows_f.append(cells)
+        # 表・対応表は2行目がそのままヘッダー行になる。
+        # それ以外（配置図・対比・色見本・タイムライン・手順）は列の意味が
+        # 位置で決まっているので、2行目の列見出しは描画に渡さない。
+        if fig_kind[name] not in ('表', '対応表'):
+            rows_f = rows_f[1:]
+        if rows_f:
+            figs[name] = rows_f
 
     hdr = svc.spreadsheets().values().get(
         spreadsheetId=DB, range="マニュアルDB!A1:Q1").execute().get('values', [[]])[0]
     rows = svc.spreadsheets().values().get(
         spreadsheetId=DB, range="マニュアルDB!A2:Q400").execute().get('values', [])
 
-    items, no_kw, missing_sheet = [], [], []
+    items, no_kw, missing_sheet, sheet_refs = [], [], [], set()
     for r in rows:
         if not r or not r[0]:
             continue
@@ -70,8 +80,11 @@ def main(generated=None):
         # ②③PDFと同じ条件：清書完了=TRUE かつ 有効
         if d['ステータス'] != '有効' or str(d['清書完了']).upper() != 'TRUE':
             continue
-        sheet = d['チェックリストシート'].strip()
-        if sheet and sheet not in cl:
+        sheet = d['別シート'].strip()
+        is_fig = bool(RE_FIGSHEET.match(sheet))
+        if sheet:
+            sheet_refs.add(sheet)
+        if sheet and sheet not in cl and sheet not in figs:
             missing_sheet.append(d['ID'])
         if not d['検索キーワード'].strip():
             no_kw.append(d['ID'])
@@ -81,9 +94,9 @@ def main(generated=None):
             "title": d['タイトル'].strip(),
             "body": d['内容'].strip(),
             "kw": d['検索キーワード'].strip(),   # 検索専用。画面には表示しない
-            "cl": cl.get(sheet, []) if sheet else [],
-            "fk": fig_kind.get(d['ID'], ""),      # 表示形式（図表シート由来）
-            "fg": figs.get(d['ID'], []),          # 図表データ
+            "cl": [] if is_fig else cl.get(sheet, []),
+            "fk": fig_kind.get(sheet, "") if is_fig else "",   # 表示形式（シートB1）
+            "fg": figs.get(sheet, []) if is_fig else [],       # 図表データ
         })
 
     unknown = sorted({i['genre'] for i in items} - set(GENRES))
@@ -98,12 +111,12 @@ def main(generated=None):
 
     n_fig = sum(1 for i in items if i['fg'])
     print(f"項目 {len(items)} / 章 {len(payload['genres'])} / CL {sum(len(i['cl']) for i in items)}項目 / 図表 {n_fig}件")
-    orphan = sorted(set(figs) - {str(i['id']) for i in items})
+    orphan = sorted(set(figs) - sheet_refs)
     if orphan:
-        print("!! 図表があるのに対象行でないID（廃止・未清書など）:", orphan)
+        print("!! シートはあるがDBのF列から参照されていない:", orphan)
     nokind = sorted([i['id'] for i in items if i['fg'] and not i['fk']])
     if nokind:
-        print("!! 表示形式が未指定の図表:", nokind)
+        print("!! B1の表示形式が未指定:", nokind)
     print(f"出力 {OUT} ({os.path.getsize(OUT)} bytes)")
     if unknown:
         print("!! 未知の大ジャンル（章から漏れます）:", unknown)
