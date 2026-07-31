@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#2b4257">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Sasho マニュアル">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" type="image/png" href="favicon.png">
+<title>Sasho マニュアル</title>
+<style>
+:root{
+  --ink:#1a1a1a; --ink2:#4a4a4a; --ink3:#7a7a7a;
+  --accent:#2b4257; --accent-l:#eaeef2; --accent-b:#c3ced8;
+  --ng:#9c3428; --ng-bg:#fbf1ef; --ok:#2f6b4f; --ok-bg:#eff5f1;
+  --warn:#8a6521; --warn-bg:#fbf6ea;
+  --line:#e2e6ea; --paper:#f7f8f9; --bg:#fff;
+  --hit:#fff6d5;
+  --gothic:"Hiragino Sans","Yu Gothic Medium","Yu Gothic","Meiryo",system-ui,sans-serif;
+  --mincho:"Hiragino Mincho ProN","Yu Mincho","YuMincho",serif;
+  --h:env(safe-area-inset-top,0px);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--gothic);color:var(--ink);background:var(--bg);
+  font-size:16px;line-height:1.8;-webkit-text-size-adjust:100%}
+
+/* ── ヘッダー ── */
+header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.97);
+  backdrop-filter:saturate(180%) blur(8px);border-bottom:1px solid var(--line);
+  padding:calc(8px + var(--h)) 12px 8px}
+.bar{display:flex;align-items:center;gap:10px;max-width:900px;margin:0 auto}
+.brand{font-family:var(--mincho);font-size:15px;letter-spacing:.12em;color:var(--accent);
+  white-space:nowrap;flex:0 0 auto}
+.sbox{flex:1 1 auto;position:relative;display:flex;align-items:center}
+#q{width:100%;font:inherit;font-size:17px;padding:12px 40px 12px 40px;
+  border:1.5px solid var(--accent-b);border-radius:12px;background:var(--paper);color:var(--ink)}
+#q:focus{outline:none;border-color:var(--accent);background:#fff}
+.sbox::before{content:"";position:absolute;left:14px;width:15px;height:15px;
+  border:2px solid var(--ink3);border-radius:50%;pointer-events:none}
+.sbox::after{content:"";position:absolute;left:26px;top:26px;width:7px;height:2px;
+  background:var(--ink3);transform:rotate(45deg);pointer-events:none}
+#clr{position:absolute;right:6px;border:0;background:transparent;color:var(--ink3);
+  font-size:24px;line-height:1;padding:6px 10px;cursor:pointer;display:none}
+#clr.on{display:block}
+
+/* ── 結果 ── */
+main{max-width:900px;margin:0 auto;padding:0 12px 80px}
+#res{padding-top:14px}
+.rmeta{font-size:13px;color:var(--ink3);padding:2px 2px 10px}
+.hit{display:block;text-decoration:none;color:inherit;border:1px solid var(--line);
+  border-left:4px solid var(--accent);border-radius:10px;padding:12px 14px;margin-bottom:10px;
+  background:#fff}
+.hit:active{background:var(--paper)}
+.hit .ht{font-size:16.5px;font-weight:700;line-height:1.5;margin-bottom:3px}
+.hit .hg{font-size:12px;color:var(--accent);background:var(--accent-l);
+  border-radius:4px;padding:2px 7px;display:inline-block;margin-bottom:6px}
+.hit .hs{font-size:14px;color:var(--ink2);line-height:1.7;
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.hit mark{background:var(--hit);color:inherit;border-radius:2px;padding:0 1px}
+.none{border:1px solid var(--warn-bg);background:var(--warn-bg);border-radius:10px;
+  padding:16px;font-size:15px;line-height:1.85;color:var(--ink)}
+.none b{color:var(--warn)}
+.none .tips{margin:8px 0 0;padding-left:1.2em;font-size:14px;color:var(--ink2)}
+
+/* ── 目次 ── */
+.toc{margin:14px 0 4px}
+.toc h2{font-family:var(--mincho);font-size:15px;letter-spacing:.16em;color:var(--accent);
+  margin:0 0 8px;padding-bottom:6px;border-bottom:1.5px solid var(--accent)}
+.toc ol{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:6px}
+@media(max-width:520px){.toc ol{grid-template-columns:1fr}}
+.toc a{display:flex;align-items:center;gap:8px;text-decoration:none;color:inherit;
+  border:1px solid var(--line);border-radius:9px;padding:11px 12px;background:#fff;font-size:15px}
+.toc a:active{background:var(--paper)}
+.toc .n{flex:0 0 auto;font-family:var(--mincho);font-size:11px;color:#fff;background:var(--accent);
+  border-radius:4px;padding:2px 6px}
+.toc .c{flex:0 0 auto;margin-left:auto;font-size:12px;color:var(--ink3)}
+
+/* ── 本文 ── */
+.ch{margin:26px 0 0;scroll-margin-top:80px}
+.ch-h{display:flex;align-items:baseline;gap:9px;margin:0 0 12px;padding-bottom:7px;
+  border-bottom:2px solid var(--accent)}
+.ch-n{font-family:var(--mincho);font-size:11px;letter-spacing:.1em;color:#fff;
+  background:var(--accent);border-radius:4px;padding:3px 7px;flex:0 0 auto}
+.ch-t{font-family:var(--mincho);font-size:20px;font-weight:600;letter-spacing:.05em}
+.it{border:1px solid var(--line);border-radius:11px;padding:14px 15px;margin-bottom:11px;
+  background:#fff;scroll-margin-top:78px;transition:background .5s,box-shadow .5s}
+.it.flash{background:var(--hit);box-shadow:0 0 0 3px #f3dd93}
+.it-h{display:flex;align-items:baseline;gap:8px;font-size:17px;font-weight:700;
+  line-height:1.5;margin-bottom:7px}
+.it-h .id{flex:0 0 auto;margin-left:auto;font-size:11px;font-weight:400;color:var(--ink3);
+  font-variant-numeric:tabular-nums}
+.it p{margin:0 0 7px;font-size:15.5px;line-height:1.85}
+.it p:last-child{margin-bottom:0}
+.note{background:var(--paper);border-left:3px solid var(--accent-b);border-radius:0 6px 6px 0;
+  padding:9px 12px;margin:9px 0 0;font-size:14.5px;line-height:1.8;color:var(--ink2)}
+.danger{background:var(--ng-bg);border:1px solid #e6cdc8;border-left:4px solid var(--ng);
+  border-radius:0 8px 8px 0;padding:11px 13px;margin:9px 0 0;font-size:15px;line-height:1.8}
+.danger b{color:var(--ng)}
+ol.cl{counter-reset:c;list-style:none;margin:10px 0 0;padding:0}
+ol.cl li{counter-increment:c;position:relative;padding:0 0 9px 34px;font-size:15.5px;line-height:1.75}
+ol.cl li:last-child{padding-bottom:0}
+ol.cl li::before{content:counter(c);position:absolute;left:0;top:1px;width:23px;height:23px;
+  border-radius:50%;background:var(--accent);color:#fff;font-size:12px;font-weight:700;
+  display:flex;align-items:center;justify-content:center}
+.it.safety{border-left:4px solid var(--warn)}
+
+/* ── 上に戻る ── */
+#top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;
+  width:48px;height:48px;border-radius:50%;border:1px solid var(--accent-b);background:rgba(255,255,255,.95);
+  color:var(--accent);font-size:20px;cursor:pointer;display:none;
+  box-shadow:0 2px 10px rgba(0,0,0,.12)}
+#top.on{display:block}
+footer{max-width:900px;margin:30px auto 0;padding:14px 12px calc(20px + env(safe-area-inset-bottom,0px));
+  border-top:1px solid var(--line);font-size:12.5px;color:var(--ink3);line-height:1.8}
+.hide{display:none !important}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="bar">
+    <div class="brand">Sasho</div>
+    <div class="sbox">
+      <input id="q" type="search" inputmode="search" enterkeyhint="search" autocomplete="off"
+             placeholder="知りたいことを入力（例: キャンセル料）">
+      <button id="clr" type="button" aria-label="消す">&times;</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div id="res"></div>
+  <div id="browse"></div>
+</main>
+
+<button id="top" type="button" aria-label="上に戻る">↑</button>
+
+<footer>
+  <div id="foot"></div>
+  マニュアルDBから自動生成されています。修正・追加の要望は経営陣へ。
+</footer>
+
+<script src="data.json.js"></script>
+<script>
+(function(){
+  "use strict";
+  var D = window.__SASHO__ || {genres:[],items:[]};
+  var items = D.items, genres = D.genres;
+
+  /* ── 日本語向け正規化：全角半角・大小・カタカナ→ひらがな ── */
+  function norm(s){
+    s = (s||"").normalize("NFKC").toLowerCase();
+    var o = "";
+    for (var i=0;i<s.length;i++){
+      var c = s.charCodeAt(i);
+      // カタカナ(ァ-ヶ) → ひらがな。「ダスター」と「だすたー」を同一視する
+      o += (c >= 0x30A1 && c <= 0x30F6) ? String.fromCharCode(c - 0x60) : s[i];
+    }
+    return o;
+  }
+  items.forEach(function(it){
+    it._t = norm(it.title);
+    it._b = norm(it.body);
+    it._k = norm(it.kw);
+    it._c = norm(it.cl.join(" "));
+  });
+
+  function esc(s){ return (s||"").replace(/[&<>"]/g, function(m){
+    return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[m]; }); }
+  function nl2html(t){
+    var bs = esc(t).split(/\n{2,}/).filter(Boolean);
+    return bs.map(function(b){
+      var ls = b.split("\n").filter(function(l){return l.trim();});
+      var h = ls.join("<br>");
+      // 【背景】【要確認】等で始まる段落は補足ボックスにする
+      return /^【/.test(b.trim()) ? '<div class="note">'+h+'</div>' : '<p>'+h+'</p>';
+    }).join("");
+  }
+
+  /* ── 検索：空白区切りはAND。タイトル>キーワード>本文>CL項目 で重み付け ── */
+  function search(qs){
+    var terms = norm(qs).split(/[\s　]+/).filter(Boolean);
+    if (!terms.length) return null;
+    var out = [];
+    items.forEach(function(it){
+      var sc = 0, ok = true;
+      terms.forEach(function(t){
+        var s = 0;
+        if (it._t.indexOf(t) >= 0) s += 100;
+        if (it._k.indexOf(t) >= 0) s += 50;
+        if (it._b.indexOf(t) >= 0) s += 20;
+        if (it._c.indexOf(t) >= 0) s += 14;
+        if (!s) ok = false;
+        sc += s;
+      });
+      if (ok) out.push({it:it, sc:sc});
+    });
+    out.sort(function(a,b){ return b.sc - a.sc || a.it.id - b.it.id; });
+    return {terms:terms, hits:out};
+  }
+
+  /* 一致箇所を含む抜粋を作る（本文→CL項目の順で探す） */
+  function snippet(it, terms){
+    var src = it.body.replace(/\s+/g," ").trim();
+    var hay = norm(src), pos = -1, hitTerm = "";
+    for (var i=0;i<terms.length;i++){
+      var p = hay.indexOf(terms[i]);
+      if (p >= 0 && (pos < 0 || p < pos)) { pos = p; hitTerm = terms[i]; }
+    }
+    if (pos < 0 && it.cl.length){
+      for (var j=0;j<it.cl.length;j++){
+        var ch = norm(it.cl[j]);
+        for (var k=0;k<terms.length;k++){
+          if (ch.indexOf(terms[k]) >= 0){ src = it.cl[j]; hay = ch; pos = ch.indexOf(terms[k]); hitTerm = terms[k]; break; }
+        }
+        if (pos >= 0) break;
+      }
+    }
+    if (pos < 0) return esc(src.slice(0,90));
+    var st = Math.max(0, pos - 28);
+    var frag = (st > 0 ? "…" : "") + src.slice(st, st + 110);
+    var out = esc(frag), nf = norm(frag), at = nf.indexOf(hitTerm);
+    if (at >= 0) out = esc(frag.slice(0,at)) + "<mark>" + esc(frag.slice(at, at+hitTerm.length)) + "</mark>" + esc(frag.slice(at+hitTerm.length));
+    return out;
+  }
+
+  var elQ = document.getElementById("q"), elClr = document.getElementById("clr"),
+      elRes = document.getElementById("res"), elBrowse = document.getElementById("browse"),
+      elTop = document.getElementById("top");
+
+  /* ── 一覧（目次＋全文）を描く ── */
+  function renderBrowse(){
+    var h = ['<nav class="toc"><h2>目次</h2><ol>'];
+    genres.forEach(function(g,i){
+      var n = items.filter(function(it){return it.genre===g;}).length;
+      h.push('<li><a href="#ch'+(i+1)+'"><span class="n">'+(i+1)+'</span><span>'+esc(g)+'</span><span class="c">'+n+'</span></a></li>');
+    });
+    h.push('</ol></nav>');
+    genres.forEach(function(g,i){
+      var list = items.filter(function(it){return it.genre===g;});
+      h.push('<section class="ch" id="ch'+(i+1)+'"><h2 class="ch-h"><span class="ch-n">第'+(i+1)+'章</span><span class="ch-t">'+esc(g)+'</span></h2>');
+      list.forEach(function(it){ h.push(card(it)); });
+      h.push('</section>');
+    });
+    elBrowse.innerHTML = h.join("");
+  }
+  function card(it){
+    var safety = (it.genre === "安全管理");
+    var h = ['<article class="it'+(safety?' safety':'')+'" id="id-'+it.id+'">',
+             '<h3 class="it-h"><span>'+esc(it.title)+'</span><span class="id">'+it.id+'</span></h3>',
+             nl2html(it.body)];
+    if (it.cl.length){
+      h.push('<ol class="cl">');
+      it.cl.forEach(function(c){ h.push('<li>'+esc(c)+'</li>'); });
+      h.push('</ol>');
+    }
+    h.push('</article>');
+    return h.join("");
+  }
+
+  /* ── 検索結果を描く ── */
+  function renderRes(qs){
+    var r = search(qs);
+    if (!r){ elRes.innerHTML = ""; elBrowse.classList.remove("hide"); return; }
+    elBrowse.classList.add("hide");
+    if (!r.hits.length){
+      elRes.innerHTML = '<div class="none"><b>該当する項目は見つかりませんでした。</b>'
+        + '<ul class="tips"><li>言い方を変えてみてください（例:「代金」→「料金」「いくら」）</li>'
+        + '<li>単語を短く、1語だけで試してみてください</li>'
+        + '<li>それでも無い場合、マニュアルに未記載の可能性があります。経営陣へご連絡ください</li></ul></div>';
+      return;
+    }
+    var h = ['<div class="rmeta">'+r.hits.length+'件見つかりました</div>'];
+    r.hits.slice(0,40).forEach(function(o){
+      h.push('<a class="hit" href="#id-'+o.it.id+'" data-id="'+o.it.id+'">'
+        + '<span class="hg">'+esc(o.it.genre)+'</span>'
+        + '<div class="ht">'+esc(o.it.title)+'</div>'
+        + '<div class="hs">'+snippet(o.it, r.terms)+'</div></a>');
+    });
+    if (r.hits.length > 40) h.push('<div class="rmeta">上位40件を表示しています。語を足すと絞り込めます。</div>');
+    elRes.innerHTML = h.join("");
+  }
+
+  /* 結果をタップ → 一覧に戻して該当項目へ飛び、一瞬光らせる */
+  elRes.addEventListener("click", function(e){
+    var a = e.target.closest ? e.target.closest("a.hit") : null;
+    if (!a) return;
+    e.preventDefault();
+    var id = a.getAttribute("data-id");
+    elQ.value = ""; elClr.classList.remove("on");
+    elRes.innerHTML = ""; elBrowse.classList.remove("hide");
+    jump(id);
+  });
+
+  function jump(id){
+    var el = document.getElementById("id-" + id);
+    if (!el) return;
+    el.scrollIntoView({block:"start"});
+    el.classList.add("flash");
+    setTimeout(function(){ el.classList.remove("flash"); }, 1600);
+    if (history.replaceState) history.replaceState(null, "", "#id-" + id);
+  }
+
+  var t = null;
+  elQ.addEventListener("input", function(){
+    elClr.classList.toggle("on", !!elQ.value);
+    clearTimeout(t);
+    t = setTimeout(function(){ renderRes(elQ.value); }, 90);
+  });
+  elQ.addEventListener("keydown", function(e){ if (e.key === "Enter") elQ.blur(); });
+  elClr.addEventListener("click", function(){
+    elQ.value = ""; elClr.classList.remove("on"); renderRes(""); elQ.focus();
+  });
+
+  elTop.addEventListener("click", function(){ window.scrollTo({top:0}); });
+  window.addEventListener("scroll", function(){
+    elTop.classList.toggle("on", window.scrollY > 500);
+  }, {passive:true});
+
+  renderBrowse();
+  document.getElementById("foot").textContent =
+    "全" + items.length + "項目・" + genres.length + "章／" + (D.generated || "");
+
+  /* URLに #id-51 が付いていれば直接その項目へ */
+  if (/^#id-\d+$/.test(location.hash)) {
+    setTimeout(function(){ jump(location.hash.replace("#id-","")); }, 60);
+  }
+})();
+</script>
+</body>
+</html>
