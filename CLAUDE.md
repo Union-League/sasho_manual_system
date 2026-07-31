@@ -65,6 +65,11 @@
 
 - 認証: サービスアカウント方式。鍵JSONは `~/.sasho/service-account.json` に配置。
 - 使用API: Google Sheets API / Google Drive API
+- **①DB・PDF・各フォルダは「共有ドライブ」上にある**（driveId=`0ADMF49Z5T6kuUk9PVA`）。
+  そのため **Drive APIの全呼び出しに `supportsAllDrives=True` が必要**
+  （files.get / copy / update / list。listは加えて `includeItemsFromAllDrives=True`）。
+  付け忘れると、権限があるファイルでも **404 File not found** になる。
+  Sheets APIには不要なので、「Sheetsは読めるのにDriveが404」ならこれを疑う。
 - Pythonの `google-api-python-client` + `google-auth` を使用する。
   未インストールなら `pip install google-api-python-client google-auth` を実行してよい。
 

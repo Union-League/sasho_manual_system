@@ -69,7 +69,14 @@ def main(generated=None):
     rows = svc.spreadsheets().values().get(
         spreadsheetId=DB, range="マニュアルDB!A2:Q400").execute().get('values', [])
 
-    items, no_kw, missing_sheet, sheet_refs = [], [], [], set()
+    def strip_todo(text):
+        """【要確認】は内部メモ。②③PDFと同様、成果物には出さない。"""
+        keep, drop = [], []
+        for line in text.split("\n"):
+            (drop if '【要確認】' in line else keep).append(line)
+        return "\n".join(keep).strip(), drop
+
+    items, no_kw, missing_sheet, sheet_refs, todos = [], [], [], set(), []
     for r in rows:
         if not r or not r[0]:
             continue
@@ -85,11 +92,14 @@ def main(generated=None):
             missing_sheet.append(d['ID'])
         if not d['検索キーワード'].strip():
             no_kw.append(d['ID'])
+        body, dropped = strip_todo(d['内容'].strip())
+        for x in dropped:
+            todos.append((d['ID'], x.strip()))
         items.append({
             "id": int(d['ID']),
             "genre": d['大ジャンル'].strip(),
             "title": d['タイトル'].strip(),
-            "body": d['内容'].strip(),
+            "body": body,
             "kw": d['検索キーワード'].strip(),   # 検索専用。画面には表示しない
             "cl": cl.get(sheet, []),                      # チェックリストの全項目
             "fk": "" if is_cl else fig_kind.get(sheet, ""),  # 表示形式（シートB1）
@@ -121,6 +131,10 @@ def main(generated=None):
         print("!! 参照先シートが見つからない行:", missing_sheet)
     if no_kw:
         print("!! 検索キーワード未入力（検索で引けません）:", no_kw)
+    if todos:
+        print(f"!! 【要確認】を{len(todos)}件、成果物から除外しました（内部メモのため）:")
+        for i, x in todos:
+            print(f"   ID{i} {x[:70]}")
 
 
 if __name__ == '__main__':

@@ -48,6 +48,9 @@ Sashoのスタッフ向けマニュアルを、単一のマスターデータベ
 
 - **実行ツール**: Claude Code（3人全員が各自のPCで実行できる環境を整える）
 - **接続方式**: Google Sheets API + Google Drive API を、**サービスアカウント方式**で直結
+  - **対象ファイルは共有ドライブ上にある**（driveId=`0ADMF49Z5T6kuUk9PVA`）。
+    Drive APIは `supportsAllDrives=True` 必須（listは `includeItemsFromAllDrives=True` も）。
+    付け忘れると権限があっても404 File not found になる（2026-07-31に実際に発生）
   - Google Cloudでサービスアカウントを1つ作成し、鍵（JSON）を3人のClaude Code環境に配置
   - ①DB・共有用フォルダ・履歴フォルダ・ToDo管理表を、サービスアカウントのメールアドレスに共有
   - 3人が同一権限で読み書きできる。個別OAuth不要

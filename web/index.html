@@ -226,7 +226,7 @@ footer{max-width:900px;margin:30px auto 0;padding:14px 12px calc(20px + env(safe
      ｜区切りが2行以上続く段落 → 表（1行目がヘッダー）
      ①②③… で始まる行だけの段落 → 番号付きリスト
      複雑な図表は別シート（ID○○）side で描くのでここでは扱わない */
-  var STEP = /^[①-⑳]/;
+  var STEP = /^(?:[①-⑳]|\d{1,2}[.．])\s*/;
   function nl2html(t){
     var bs = esc(t).split(/\n{2,}/).filter(Boolean);
     return bs.map(function(b){
@@ -254,6 +254,15 @@ footer{max-width:900px;margin:30px auto 0;padding:14px 12px calc(20px + env(safe
       if (ls.length >= 2 && ls.every(function(l){ return STEP.test(l.trim()); })){
         return '<ol class="cl">' + ls.map(function(l){
           return '<li>' + l.trim().replace(STEP, "").trim() + '</li>'; }).join("") + '</ol>';
+      }
+
+      // 【背景】以降はそのまま補足ボックスに入れる（段落の途中から始まる場合も）
+      var ni = -1;
+      for (var i=0;i<ls.length;i++){ if (/^【/.test(ls[i].trim())) { ni = i; break; } }
+      if (ni >= 0){
+        var pre = ls.slice(0, ni), post = ls.slice(ni);
+        return (pre.length ? '<p>'+pre.join("<br>")+'</p>' : '')
+             + '<div class="note">' + post.join("<br>") + '</div>';
       }
 
       var h2 = ls.join("<br>");
