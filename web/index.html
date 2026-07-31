@@ -107,6 +107,55 @@ ol.cl li::before{content:counter(c);position:absolute;left:0;top:1px;width:23px;
   display:flex;align-items:center;justify-content:center}
 .it.safety{border-left:4px solid var(--warn)}
 
+/* ── 図表部品（図表シートの表示形式ごと） ── */
+.fw{margin:11px 0 0;overflow-x:auto;-webkit-overflow-scrolling:touch}
+/* 幅を超えたら折り返して収める。それでも入らない表だけ .fw が横スクロールする */
+table.fg{border-collapse:collapse;width:100%;font-size:14.5px;table-layout:auto}
+table.fg th,table.fg td{border:1px solid var(--line);padding:9px 11px;text-align:left;
+  vertical-align:top;line-height:1.7;word-break:break-word;overflow-wrap:anywhere}
+table.fg th{background:var(--accent-l);color:var(--accent);font-weight:700;font-size:13px}
+table.fg td:first-child{background:var(--paper);font-weight:600}
+table.fg td.num{text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+
+/* 配置図：グループごとに縦積みの棚 */
+.shelf{display:flex;gap:12px;margin:11px 0 0;flex-wrap:wrap}
+.shelf .col{flex:1 1 160px;min-width:150px}
+.shelf .cap{font-size:13px;font-weight:700;color:var(--accent);text-align:center;
+  background:var(--accent-l);border:1px solid var(--accent-b);border-bottom:0;
+  border-radius:8px 8px 0 0;padding:7px}
+.shelf .cell{border:1px solid var(--accent-b);border-top:0;padding:10px 8px;text-align:center;
+  background:#fff;font-size:15px;line-height:1.5}
+.shelf .cell:last-child{border-radius:0 0 8px 8px}
+.shelf .cell small{display:block;color:var(--ink3);font-size:11.5px;margin-bottom:2px}
+
+/* 色見本 */
+.sw{display:inline-block;width:17px;height:17px;border-radius:50%;
+  border:1px solid rgba(0,0,0,.22);margin-right:8px;vertical-align:-3px;flex:0 0 auto}
+
+/* 対比：対象ごとに列を作る */
+.cmp{display:flex;gap:11px;margin:11px 0 0;flex-wrap:wrap}
+.cmp .col{flex:1 1 240px;min-width:220px;border:1px solid var(--line);border-radius:9px;
+  overflow:hidden;background:#fff}
+.cmp .ch2{background:var(--accent-l);color:var(--accent);font-weight:700;font-size:13.5px;
+  padding:8px 11px;border-bottom:1px solid var(--line)}
+.cmp ul{margin:0;padding:9px 11px 10px 26px;font-size:14.5px;line-height:1.75}
+.cmp li{margin-bottom:5px}
+.cmp li:last-child{margin-bottom:0}
+
+/* タイムライン */
+.tl{margin:11px 0 0;padding-left:3px;border-left:2px solid var(--accent-b)}
+.tl .row{position:relative;display:flex;gap:11px;padding:0 0 12px 14px}
+.tl .row:last-child{padding-bottom:0}
+.tl .row::before{content:"";position:absolute;left:-6px;top:7px;width:9px;height:9px;
+  border-radius:50%;background:var(--accent)}
+.tl .tm{flex:0 0 92px;font-weight:700;color:var(--accent);font-size:14.5px}
+.tl .ev{flex:1;font-size:15px;line-height:1.65}
+.tl .ev small{display:block;color:var(--ink3);font-size:13px;margin-top:2px}
+@media(max-width:420px){
+  .tl .row{flex-direction:column;gap:2px}
+  .tl .tm{flex:none}
+}
+
 /* ── 上に戻る ── */
 #top{position:fixed;right:14px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:40;
   width:48px;height:48px;border-radius:50%;border:1px solid var(--accent-b);background:rgba(255,255,255,.95);
@@ -166,6 +215,9 @@ footer{max-width:900px;margin:30px auto 0;padding:14px 12px calc(20px + env(safe
     it._b = norm(it.body);
     it._k = norm(it.kw);
     it._c = norm(it.cl.join(" "));
+    // 図表の中身も検索対象にする（「内容」を要約にしたため、これが無いと図表内の語で引けない）
+    it._fg = (it.fg || []).map(function(r){ return r.join(" "); });
+    it._f = norm(it._fg.join(" "));
   });
 
   function esc(s){ return (s||"").replace(/[&<>"]/g, function(m){
@@ -192,6 +244,7 @@ footer{max-width:900px;margin:30px auto 0;padding:14px 12px calc(20px + env(safe
         if (it._t.indexOf(t) >= 0) s += 100;
         if (it._k.indexOf(t) >= 0) s += 50;
         if (it._b.indexOf(t) >= 0) s += 20;
+        if (it._f.indexOf(t) >= 0) s += 18;
         if (it._c.indexOf(t) >= 0) s += 14;
         if (!s) ok = false;
         sc += s;
@@ -210,11 +263,14 @@ footer{max-width:900px;margin:30px auto 0;padding:14px 12px calc(20px + env(safe
       var p = hay.indexOf(terms[i]);
       if (p >= 0 && (pos < 0 || p < pos)) { pos = p; hitTerm = terms[i]; }
     }
-    if (pos < 0 && it.cl.length){
-      for (var j=0;j<it.cl.length;j++){
-        var ch = norm(it.cl[j]);
+    // 本文に無ければ 図表の行 → CL項目 の順に一致箇所を探す
+    var pools = [it._fg || [], it.cl || []];
+    for (var pi=0; pi<pools.length && pos<0; pi++){
+      var pool = pools[pi];
+      for (var j=0;j<pool.length;j++){
+        var ch = norm(pool[j]);
         for (var k=0;k<terms.length;k++){
-          if (ch.indexOf(terms[k]) >= 0){ src = it.cl[j]; hay = ch; pos = ch.indexOf(terms[k]); hitTerm = terms[k]; break; }
+          if (ch.indexOf(terms[k]) >= 0){ src = pool[j]; hay = ch; pos = ch.indexOf(terms[k]); hitTerm = terms[k]; break; }
         }
         if (pos >= 0) break;
       }
@@ -231,8 +287,19 @@ footer{max-width:900px;margin:30px auto 0;padding:14px 12px calc(20px + env(safe
       elRes = document.getElementById("res"), elBrowse = document.getElementById("browse"),
       elTop = document.getElementById("top");
 
+  /* ?only=28,5 で指定IDだけを表示（見た目の確認用・特定項目の共有用） */
+  var ONLY = (function(){
+    var m = /[?&]only=([\d,]+)/.exec(location.search);
+    return m ? m[1].split(",").filter(Boolean).map(Number) : null;
+  })();
+
   /* ── 一覧（目次＋全文）を描く ── */
   function renderBrowse(){
+    if (ONLY){
+      elBrowse.innerHTML = items.filter(function(it){ return ONLY.indexOf(it.id) >= 0; })
+        .map(function(it){ return card(it); }).join("");
+      return;
+    }
     var h = ['<nav class="toc"><h2>目次</h2><ol>'];
     genres.forEach(function(g,i){
       var n = items.filter(function(it){return it.genre===g;}).length;
@@ -247,11 +314,119 @@ footer{max-width:900px;margin:30px auto 0;padding:14px 12px calc(20px + env(safe
     });
     elBrowse.innerHTML = h.join("");
   }
+  /* ── 図表シートの表示形式ごとに描く ── */
+  var isNum = function(s){ return /^[¥￥$]?[\d,]+(\.\d+)?$/.test((s||"").trim()) || /^[+\-][¥￥$]?[\d,]/.test((s||"").trim()); };
+
+  function figure(kind, rows){
+    if (!rows || !rows.length) return "";
+    switch (kind){
+
+      case "表":
+      case "対応表": {
+        var head = rows[0], body = rows.slice(1);
+        var h = ['<div class="fw"><table class="fg"><thead><tr>'];
+        head.forEach(function(c){ h.push('<th>'+esc(c)+'</th>'); });
+        h.push('</tr></thead><tbody>');
+        body.forEach(function(r){
+          h.push('<tr>');
+          for (var i=0;i<head.length;i++){
+            var v = r[i] || "";
+            h.push('<td'+(i>0 && isNum(v) ? ' class="num"' : '')+'>'+esc(v)+'</td>');
+          }
+          h.push('</tr>');
+        });
+        h.push('</tbody></table></div>');
+        return h.join("");
+      }
+
+      case "配置図": {
+        // セル1=グループ / セル2=位置ラベル / セル3=中身
+        var order = [], byg = {};
+        rows.forEach(function(r){
+          var g = r[0] || "";
+          if (!byg[g]) { byg[g] = []; order.push(g); }
+          byg[g].push({pos:r[1]||"", val:r[2]||""});
+        });
+        var h = ['<div class="shelf">'];
+        order.forEach(function(g){
+          h.push('<div class="col"><div class="cap">'+esc(g)+'</div>');
+          byg[g].forEach(function(c){
+            h.push('<div class="cell">'+(c.pos?'<small>'+esc(c.pos)+'</small>':'')+esc(c.val)+'</div>');
+          });
+          h.push('</div>');
+        });
+        h.push('</div>');
+        return h.join("");
+      }
+
+      case "色見本": {
+        // セル1=色名 / セル2=カラーコード / セル3=用途
+        var h = ['<div class="fw"><table class="fg"><thead><tr><th>色</th><th>用途</th></tr></thead><tbody>'];
+        rows.forEach(function(r){
+          var sw = /^#[0-9a-fA-F]{3,8}$/.test((r[1]||"").trim())
+                 ? '<span class="sw" style="background:'+esc(r[1])+'"></span>' : '';
+          h.push('<tr><td style="white-space:nowrap">'+sw+esc(r[0])+'</td><td>'+esc(r[2]||"")+'</td></tr>');
+        });
+        h.push('</tbody></table></div>');
+        return h.join("");
+      }
+
+      case "対比": {
+        // セル1=対象 / セル2=項目（1項目1行）
+        var order2 = [], by = {};
+        rows.forEach(function(r){
+          var k = r[0] || "";
+          if (!by[k]) { by[k] = []; order2.push(k); }
+          if (r[1]) by[k].push(r[1]);
+        });
+        var h = ['<div class="cmp">'];
+        order2.forEach(function(k){
+          h.push('<div class="col"><div class="ch2">'+esc(k)+'</div><ul>');
+          by[k].forEach(function(v){ h.push('<li>'+esc(v)+'</li>'); });
+          h.push('</ul></div>');
+        });
+        h.push('</div>');
+        return h.join("");
+      }
+
+      case "タイムライン": {
+        // セル1=時刻/見出し / セル2=内容 / セル3=補足
+        var h = ['<div class="tl">'];
+        rows.forEach(function(r){
+          h.push('<div class="row"><div class="tm">'+esc(r[0]||"")+'</div><div class="ev">'
+            + esc(r[1]||"") + (r[2] ? '<small>'+esc(r[2])+'</small>' : '') + '</div></div>');
+        });
+        h.push('</div>');
+        return h.join("");
+      }
+
+      case "手順": {
+        var h = ['<ol class="cl">'];
+        rows.forEach(function(r){ h.push('<li>'+esc(r[0]||"")+'</li>'); });
+        h.push('</ol>');
+        return h.join("");
+      }
+
+      default: {
+        // 未知の表示形式は表として描く（落とさない）
+        var h = ['<div class="fw"><table class="fg"><tbody>'];
+        rows.forEach(function(r){
+          h.push('<tr>');
+          r.forEach(function(c){ h.push('<td>'+esc(c)+'</td>'); });
+          h.push('</tr>');
+        });
+        h.push('</tbody></table></div>');
+        return h.join("");
+      }
+    }
+  }
+
   function card(it){
     var safety = (it.genre === "安全管理");
     var h = ['<article class="it'+(safety?' safety':'')+'" id="id-'+it.id+'">',
              '<h3 class="it-h"><span>'+esc(it.title)+'</span><span class="id">'+it.id+'</span></h3>',
              nl2html(it.body)];
+    if (it.fg && it.fg.length) h.push(figure(it.fk, it.fg));
     if (it.cl.length){
       h.push('<ol class="cl">');
       it.cl.forEach(function(c){ h.push('<li>'+esc(c)+'</li>'); });

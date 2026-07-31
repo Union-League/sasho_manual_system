@@ -39,6 +39,24 @@ def main(generated=None):
         cl[name] = [str(r[1]).strip() for r in vals[2:]
                     if len(r) >= 2 and str(r[0]).strip() and str(r[1]).strip()]
 
+    # 図表シート（ID単位で表・配置図などの中身を持つ）
+    figs, fig_kind = {}, {}
+    fv = svc.spreadsheets().values().get(
+        spreadsheetId=DB, range="'図表'!A3:H500").execute().get('values', [])
+    for r in fv:
+        if not r or not str(r[0]).strip():
+            continue
+        fid = str(r[0]).strip()
+        kind = (r[1] if len(r) > 1 else '').strip()
+        cells = [(r[i] if i < len(r) else '').strip() for i in range(2, 8)]
+        while cells and not cells[-1]:
+            cells.pop()
+        if not cells:
+            continue
+        figs.setdefault(fid, []).append(cells)
+        if kind:
+            fig_kind[fid] = kind
+
     hdr = svc.spreadsheets().values().get(
         spreadsheetId=DB, range="マニュアルDB!A1:Q1").execute().get('values', [[]])[0]
     rows = svc.spreadsheets().values().get(
@@ -64,6 +82,8 @@ def main(generated=None):
             "body": d['内容'].strip(),
             "kw": d['検索キーワード'].strip(),   # 検索専用。画面には表示しない
             "cl": cl.get(sheet, []) if sheet else [],
+            "fk": fig_kind.get(d['ID'], ""),      # 表示形式（図表シート由来）
+            "fg": figs.get(d['ID'], []),          # 図表データ
         })
 
     unknown = sorted({i['genre'] for i in items} - set(GENRES))
@@ -76,7 +96,14 @@ def main(generated=None):
         f.write('window.__SASHO__=' + json.dumps(payload, ensure_ascii=False,
                                                  separators=(',', ':')) + ';\n')
 
-    print(f"項目 {len(items)} / 章 {len(payload['genres'])} / CL {sum(len(i['cl']) for i in items)}項目")
+    n_fig = sum(1 for i in items if i['fg'])
+    print(f"項目 {len(items)} / 章 {len(payload['genres'])} / CL {sum(len(i['cl']) for i in items)}項目 / 図表 {n_fig}件")
+    orphan = sorted(set(figs) - {str(i['id']) for i in items})
+    if orphan:
+        print("!! 図表があるのに対象行でないID（廃止・未清書など）:", orphan)
+    nokind = sorted([i['id'] for i in items if i['fg'] and not i['fk']])
+    if nokind:
+        print("!! 表示形式が未指定の図表:", nokind)
     print(f"出力 {OUT} ({os.path.getsize(OUT)} bytes)")
     if unknown:
         print("!! 未知の大ジャンル（章から漏れます）:", unknown)
